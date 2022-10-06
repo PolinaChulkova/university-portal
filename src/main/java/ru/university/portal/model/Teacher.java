@@ -1,7 +1,6 @@
 package ru.university.portal.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,8 +8,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "teacher")
-@Getter
-@Setter
+@Getter@Setter
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
