@@ -28,6 +28,6 @@ public class Student {
     private Group group;
 
     @OneToMany(mappedBy = "student")
-    private List<GlobalRating> globalRating;
+    private List<Rating> rating;
 
 }

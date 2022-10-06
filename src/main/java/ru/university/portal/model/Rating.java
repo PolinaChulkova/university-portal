@@ -6,13 +6,13 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "global_rating")
+@Table(name = "rating")
 @Getter
 @Setter
-public class GlobalRating {
+public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "global_rating_id")
+    @Column(name = "rating_id")
     private Long id;
     @Column(name = "mark")
     private Short mark;
