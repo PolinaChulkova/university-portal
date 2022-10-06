@@ -1,10 +1,10 @@
 package ru.university.portal.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.SubjectDto;
+import ru.university.portal.model.Group;
 import ru.university.portal.model.Subject;
 import ru.university.portal.repo.SubjectRepo;
 
@@ -15,6 +15,7 @@ public class SubjectService {
 
     private final SubjectRepo subjectRepo;
     private final TeacherService teacherService;
+    private final GroupService groupService;
 
     public void createSubject(SubjectDto dto) {
         try {
@@ -28,8 +29,16 @@ public class SubjectService {
         }
     }
 
-    public void addGroupToSubject(String groupName) {
-
+    public void addGroupToSubject(String groupName, String subjectName) {
+        try {
+            Subject subject = findSubjectByName(subjectName);
+            subject.getGroups().add(groupService.findGroupByGroupName(groupName));
+            subjectRepo.save(subject);
+        } catch (RuntimeException e) {
+            log.error("Не удалось добавить группу " +  groupName
+                    + " к предмету " + subjectName + ". {}"
+                    + e.getLocalizedMessage());
+        }
     }
 
     public Subject findSubjectByName(String name) {
