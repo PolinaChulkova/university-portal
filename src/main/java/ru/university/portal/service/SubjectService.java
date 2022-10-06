@@ -26,4 +26,17 @@ public class SubjectService {
                     + e.getLocalizedMessage());
         }
     }
+
+    public Subject findSubjectByName(String name) {
+        return subjectRepo.findBySubjectName(name)
+                .orElseThrow(() -> new RuntimeException("Не удалось найти пользователя с именем "
+                        + name + "."));
+    }
+
+    public void deleteSubjectById(Long subjectId) {
+      if (subjectRepo.existsById(subjectId)) subjectRepo.deleteById(subjectId);
+      else throw new RuntimeException("Нельзя совершить удаление! " +
+              "Предмет с id=" + subjectId + " не существует.");
+    }
+
 }

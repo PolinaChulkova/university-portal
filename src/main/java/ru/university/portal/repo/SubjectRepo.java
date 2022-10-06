@@ -17,5 +17,6 @@ public interface SubjectRepo extends JpaRepository<Subject, Long> {
 
     void deleteById(Long id);
 
+    Optional<Subject> findBySubjectName(String subjectName);
 
 }
