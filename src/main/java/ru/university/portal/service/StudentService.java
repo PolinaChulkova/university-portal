@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.StudentDTO;
+import ru.university.portal.model.Group;
 import ru.university.portal.model.Student;
 import ru.university.portal.repo.StudentRepo;
 
@@ -14,11 +15,13 @@ public class StudentService {
 
     private final StudentRepo studentRepo;
 
-    public void createStudent(Student student) {
+    public void createStudent(StudentDTO dto, Group group) {
         try {
+            Student student = new Student(dto, group);
             studentRepo.save(student);
+
         } catch (RuntimeException e) {
-            log.error("Студент с email: " + student.getEmail() + " не создан. {}"
+            log.error("Студент с email: " + dto.getEmail() + " не создан. {}"
                     + e.getLocalizedMessage());
         }
     }
@@ -39,9 +42,9 @@ public class StudentService {
         }
     }
 
-    public void deleteStudentById(Long id) {
-        if (studentRepo.existsById(id)) studentRepo.deleteById(id);
-        else throw new RuntimeException("Студента с Id=" + id + " не существует!");
+    public void deleteStudentById(Long studentId) {
+        if (studentRepo.existsById(studentId)) studentRepo.deleteById(studentId);
+        else throw new RuntimeException("Студента с Id=" + studentId + " не существует!");
     }
 
     public Student findStudentById(Long id) {
