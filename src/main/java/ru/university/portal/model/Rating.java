@@ -21,7 +21,7 @@ public class Rating {
     private String comment;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task")
+    @JoinColumn(name = "task_id")
     private Task task;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -29,6 +29,7 @@ public class Rating {
     private Subject subject;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_id")
     private Student student;
 
 }

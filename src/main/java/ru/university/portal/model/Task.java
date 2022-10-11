@@ -32,12 +32,12 @@ public class Task {
     @Column(name = "file")
     private Set<String> files;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_id")
     private Group group;
 
 }

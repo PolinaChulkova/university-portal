@@ -26,7 +26,7 @@ public class Subject {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Group> groups;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subjects")
     private Teacher teacher;
 }

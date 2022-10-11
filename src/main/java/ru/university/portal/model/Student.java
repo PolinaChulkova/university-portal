@@ -30,6 +30,14 @@ public class Student {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<Rating> rating;
+
+    public Student(StudentDTO dto, Group group) {
+        this.fullName = dto.getFullName();
+        this.email = dto.getEmail();
+        this.password = dto.getPassword();
+        this.phoneNum = dto.getPhoneNum();
+        this.group = group;
+    }
 }

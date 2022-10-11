@@ -1,6 +1,7 @@
 package ru.university.portal.model;
 
 import lombok.*;
+import ru.university.portal.dto.TeacherDTO;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,10 +26,20 @@ public class Teacher {
     private String password;
     @Column(name = "phone_num")
     private String phoneNum;
+    @Column(name = "academic_degree")
+    private String academicDegree;
 
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
     private List<Task> tasks;
 
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
     private List<Subject> subjects;
+
+    public Teacher(TeacherDTO dto) {
+        this.fullName = dto.getFullName();
+        this.email = dto.getEmail();
+        this.password = dto.getPassword();
+        this.phoneNum = dto.getPhoneNum();
+        this.academicDegree = dto.getAcademicDegree();
+    }
 }
