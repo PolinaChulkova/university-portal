@@ -17,7 +17,7 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
     private Long id;
-    @Column(name = "group_name")
+    @Column(name = "group_name", unique = true)
     private String name;
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)

@@ -5,7 +5,6 @@ import ru.university.portal.dto.TeacherDTO;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "teacher")
@@ -20,7 +19,7 @@ public class Teacher {
     private Long id;
     @Column(name = "full_name")
     private String fullName;
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
     @Column(name = "password")
     private String password;

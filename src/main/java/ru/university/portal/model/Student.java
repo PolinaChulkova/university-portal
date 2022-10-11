@@ -19,7 +19,7 @@ public class Student {
     private Long id;
     @Column(name = "full_name")
     private String fullName;
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
     @Column(name = "password")
     private String password;
