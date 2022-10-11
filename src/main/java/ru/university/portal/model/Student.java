@@ -1,6 +1,7 @@
 package ru.university.portal.model;
 
 import lombok.*;
+import ru.university.portal.dto.StudentDTO;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,5 +32,4 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private List<Rating> rating;
-
 }
