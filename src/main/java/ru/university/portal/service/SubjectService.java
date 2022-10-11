@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.SubjectDto;
-import ru.university.portal.model.Group;
 import ru.university.portal.model.Subject;
 import ru.university.portal.repo.SubjectRepo;
 
@@ -23,6 +22,7 @@ public class SubjectService {
             subject.setSubjectName(dto.getSubjectName());
             subject.setTeacher(teacherService.findTeacherById(dto.getTeacherId()));
             subjectRepo.save(subject);
+
         } catch (RuntimeException e) {
             log.error("Предмет с названием " + dto.getSubjectName() + " не создан. {}"
                     + e.getLocalizedMessage());
@@ -43,7 +43,7 @@ public class SubjectService {
 
     public Subject findSubjectByName(String name) {
         return subjectRepo.findBySubjectName(name)
-                .orElseThrow(() -> new RuntimeException("Не удалось найти пользователя с именем "
+                .orElseThrow(() -> new RuntimeException("Не удалось найти предмет с именем "
                         + name + "."));
     }
 
