@@ -42,6 +42,11 @@ public class StudentService {
         }
     }
 
+    public Student findStudentByEmail(String studentEmail) {
+        return studentRepo.findByEmail(studentEmail).orElseThrow(()
+                -> new RuntimeException("Не удалось найти студента с email: " + studentEmail + "."));
+    }
+
     public void deleteStudentById(Long studentId) {
         if (studentRepo.existsById(studentId)) studentRepo.deleteById(studentId);
         else throw new RuntimeException("Студента с Id=" + studentId + " не существует!");

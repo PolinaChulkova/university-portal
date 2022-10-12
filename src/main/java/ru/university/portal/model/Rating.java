@@ -32,4 +32,11 @@ public class Rating {
     @JoinColumn(name = "student_id")
     private Student student;
 
+    public Rating(Short mark, String comment, Task task, Subject subject, Student student) {
+        this.mark = mark;
+        this.comment = comment;
+        this.task = task;
+        this.subject = subject;
+        this.student = student;
+    }
 }

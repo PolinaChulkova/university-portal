@@ -9,6 +9,10 @@ import java.util.Optional;
 
 public interface RatingRepo extends JpaRepository<Rating, Long> {
 
+    Optional<Rating> findByTaskId(Long taskId);
+
+    Optional<Rating> findByStudentIdAndSubjectId(Long studentId, Long subjectId);
+
     Optional<Rating> findById(Long id);
 
     Page<Rating> findAll(Pageable pageable);
