@@ -1,6 +1,7 @@
 package ru.university.portal.model;
 
 import lombok.*;
+import ru.university.portal.dto.TaskDTO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,9 +29,9 @@ public class Task {
     private Date deadLine;
 
     @ElementCollection
-    @CollectionTable(name = "files", joinColumns = @JoinColumn(name = "task_id"))
-    @Column(name = "file")
-    private Set<String> files;
+    @CollectionTable(name = "file_uri", joinColumns = @JoinColumn(name = "task_id"))
+    @Column(name = "file_uri")
+    private Set<String> fileUri;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id")
@@ -40,4 +41,13 @@ public class Task {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    public Task(TaskDTO dto) {
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.startLine = dto.getStartLine();
+        this.deadLine = dto.getDeadLine();
+        this.fileUri = dto.getFileUri();
+        this.teacher = dto.getTeacher();
+        this.group = dto.getGroup();
+    }
 }

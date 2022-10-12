@@ -25,7 +25,7 @@ public class TeacherService {
             teacherRepo.save(teacher);
 
         } catch (RuntimeException e) {
-            log.error("Студент с email: " + dto.getEmail() + " не создан. {}"
+            log.error("Преподаватель с email: " + dto.getEmail() + " не создан. {}"
                     + e.getLocalizedMessage());
         }
     }
