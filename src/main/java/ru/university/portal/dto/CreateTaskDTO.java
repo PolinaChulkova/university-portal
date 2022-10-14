@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Getter@Setter
-public class TaskDTO {
+public class CreateTaskDTO {
     private String name;
     private String description;
     private Date startLine;

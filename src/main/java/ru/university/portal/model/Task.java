@@ -1,11 +1,10 @@
 package ru.university.portal.model;
 
 import lombok.*;
-import ru.university.portal.dto.TaskDTO;
+import ru.university.portal.dto.CreateTaskDTO;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,7 +40,7 @@ public class Task {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    public Task(TaskDTO dto) {
+    public Task(CreateTaskDTO dto) {
         this.name = dto.getName();
         this.description = dto.getDescription();
         this.startLine = dto.getStartLine();

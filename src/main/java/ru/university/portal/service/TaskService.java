@@ -3,7 +3,8 @@ package ru.university.portal.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.university.portal.dto.TaskDTO;
+import ru.university.portal.dto.CreateTaskDTO;
+import ru.university.portal.dto.UpdateTaskDTO;
 import ru.university.portal.model.Task;
 import ru.university.portal.repo.TaskRepo;
 
@@ -14,7 +15,7 @@ public class TaskService {
 
     private final TaskRepo taskRepo;
 
-    public void createTask(TaskDTO dto) {
+    public void createTask(CreateTaskDTO dto) {
         try {
             Task task = new Task(dto);
             taskRepo.save(task);
@@ -25,18 +26,15 @@ public class TaskService {
         }
     }
 
-    public void updateTask(Long taskId, TaskDTO dto) {
+    public void updateTask(Long taskId, UpdateTaskDTO dto) {
         try {
             Task task = findTaskById(taskId);
 
 //       обновления можно сделать через query в repository
             task.setName(dto.getName());
             task.setDescription(dto.getDescription());
-            task.setStartLine(dto.getStartLine());
             task.setDeadLine(dto.getDeadLine());
             task.setFileUri(dto.getFileUri());
-            task.setTeacher(dto.getTeacher());
-            task.setGroup(dto.getGroup());
 
             taskRepo.save(task);
 
