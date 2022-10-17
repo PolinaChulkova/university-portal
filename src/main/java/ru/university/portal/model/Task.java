@@ -5,6 +5,7 @@ import ru.university.portal.dto.CreateTaskDTO;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,6 +40,9 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id")
     private Group group;
+
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+    private List<TaskAnswer> taskAnswers;
 
     public Task(CreateTaskDTO dto) {
         this.name = dto.getName();
