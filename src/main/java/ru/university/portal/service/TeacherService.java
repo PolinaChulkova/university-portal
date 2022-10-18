@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.TeacherDTO;
+import ru.university.portal.model.Group;
 import ru.university.portal.model.Subject;
 import ru.university.portal.model.Teacher;
 import ru.university.portal.repo.TeacherRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +21,12 @@ public class TeacherService {
 
     public List<Subject> findTeacherSubjects(Long teacherId) {
         return findTeacherById(teacherId).getSubjects();
+    }
+
+    public List<Group> findTeacherGroups(Long teacherId) {
+        List<Group> groups = new ArrayList<>();
+        findTeacherById(teacherId).getSubjects().forEach(s -> groups.add(s.getGroup()));
+        return groups;
     }
 
     public Teacher findTeacherById(Long teacherId) {

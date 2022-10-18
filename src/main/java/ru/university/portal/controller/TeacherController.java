@@ -21,8 +21,13 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @PostMapping("/subjects/{teacherId}")
-    public ResponseEntity<?> getSubjects(@PathVariable Long teacherId) {
+    public ResponseEntity<?> findTeacherSubjects(@PathVariable Long teacherId) {
         return ResponseEntity.ok().body(teacherService.findTeacherSubjects(teacherId));
+    }
+
+    @PostMapping("group/{teacherId}")
+    public ResponseEntity<?> findTeacherGroups(@PathVariable Long teacherId) {
+        return ResponseEntity.ok().body(teacherService.findTeacherGroups(teacherId));
     }
 
     @PostMapping("/create-task")
