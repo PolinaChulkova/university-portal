@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateRatingDTO;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.MessageResponse;
+import ru.university.portal.model.Teacher;
 import ru.university.portal.service.RatingService;
 import ru.university.portal.service.TaskService;
+import ru.university.portal.service.TeacherService;
 
 @RestController
 @RequestMapping("/teacher")
@@ -16,6 +18,12 @@ public class TeacherController {
 
     private final TaskService taskService;
     private final RatingService ratingService;
+    private final TeacherService teacherService;
+
+    @PostMapping("/subjects/{teacherId}")
+    public ResponseEntity<?> getSubjects(@PathVariable Long teacherId) {
+        return ResponseEntity.ok().body(teacherService.findTeacherSubjects(teacherId));
+    }
 
     @PostMapping("/create-task")
     public ResponseEntity<?> createTask(@RequestBody CreateTaskDTO dto) {

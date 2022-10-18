@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.TeacherDTO;
+import ru.university.portal.model.Subject;
 import ru.university.portal.model.Teacher;
 import ru.university.portal.repo.TeacherRepo;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +16,10 @@ import ru.university.portal.repo.TeacherRepo;
 public class TeacherService {
 
     private final TeacherRepo teacherRepo;
+
+    public List<Subject> findTeacherSubjects(Long teacherId) {
+        return findTeacherById(teacherId).getSubjects();
+    }
 
     public Teacher findTeacherById(Long teacherId) {
         return teacherRepo.findById(teacherId)
