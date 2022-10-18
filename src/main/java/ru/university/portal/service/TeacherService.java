@@ -18,10 +18,7 @@ import java.util.List;
 public class TeacherService {
 
     private final TeacherRepo teacherRepo;
-
-    public List<Subject> findTeacherSubjects(Long teacherId) {
-        return findTeacherById(teacherId).getSubjects();
-    }
+    private final SubjectService subjectService;
 
     public List<Group> findTeacherGroups(Long teacherId) {
         List<Group> groups = new ArrayList<>();
