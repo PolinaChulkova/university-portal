@@ -18,7 +18,7 @@ public class TaskService {
 
     private final TaskRepo taskRepo;
 
-    private List<TaskAnswer> getTaskAnswers(Long taskId) {
+    public List<TaskAnswer> getTaskAnswers(Long taskId) {
         return findTaskById(taskId).getTaskAnswers();
     }
 

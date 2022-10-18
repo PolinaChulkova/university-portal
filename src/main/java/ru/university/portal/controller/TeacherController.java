@@ -2,12 +2,10 @@ package ru.university.portal.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.MessageResponse;
+import ru.university.portal.service.TaskAnswerService;
 import ru.university.portal.service.TaskService;
 import ru.university.portal.service.TeacherService;
 
@@ -18,6 +16,7 @@ public class TeacherController {
 
     private final TeacherService teacherService;
     private final TaskService taskService;
+    private final TaskAnswerService taskAnswerService;
 
     @PostMapping("/create-task")
     public ResponseEntity<?> createTask(@RequestBody CreateTaskDTO dto) {
@@ -26,5 +25,8 @@ public class TeacherController {
                 ", вы создали задание " + dto.getName()));
     }
 
-
+    @GetMapping("/task-answers")
+    public ResponseEntity<?> getTaskAnswers(Long taskId) {
+        return ResponseEntity.ok().body(taskService.getTaskAnswers(taskId));
+    }
 }
