@@ -20,13 +20,11 @@ public class Subject {
     @Column(name = "subject_name")
     private String subjectName;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "subject_group",
-            joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id"))
-    private List<Group> groups;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subjects")
+    @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 }

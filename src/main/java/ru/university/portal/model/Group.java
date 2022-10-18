@@ -26,11 +26,6 @@ public class Group {
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private List<Task> tasks;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "subject_group",
-            joinColumns = @JoinColumn(name = "group_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id"))
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private List<Subject> subjects = new ArrayList<>();
-
-
 }
