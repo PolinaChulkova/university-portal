@@ -1,5 +1,6 @@
 package ru.university.portal.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import ru.university.portal.model.Student;
@@ -7,6 +8,7 @@ import ru.university.portal.model.Student;
 import java.util.Date;
 import java.util.Set;
 
+@AllArgsConstructor
 @Getter@Setter
 public class TaskAnswerDTO {
     private String comment;
