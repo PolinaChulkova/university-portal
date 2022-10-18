@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.TaskAnswerDTO;
+import ru.university.portal.model.Task;
 import ru.university.portal.model.TaskAnswer;
 import ru.university.portal.repo.TaskAnswerRepo;
 
@@ -17,12 +18,16 @@ public class TaskAnswerService {
 
     public void sendTaskAnswer(TaskAnswerDTO dto) {
         try {
+            Task task = taskService.findTaskById(dto.getTaskId());
             TaskAnswer answer = new TaskAnswer();
             answer.setComment(dto.getComment());
             answer.setFileUri(dto.getFileUri());
             answer.setStudent(dto.getStudent());
-            answer.setTask(taskService.findTaskById(dto.getTaskId()));
+            answer.setTask(task);
 
+            task.getTaskAnswers().add(answer);
+
+            taskService.saveTask(task);
             taskAnswerRepo.save(answer);
 
         } catch (RuntimeException e) {

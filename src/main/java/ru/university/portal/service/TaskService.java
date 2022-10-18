@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.UpdateTaskDTO;
 import ru.university.portal.model.Task;
+import ru.university.portal.model.TaskAnswer;
 import ru.university.portal.repo.TaskRepo;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +17,10 @@ import ru.university.portal.repo.TaskRepo;
 public class TaskService {
 
     private final TaskRepo taskRepo;
+
+    private List<TaskAnswer> getTaskAnswers(Long taskId) {
+        return findTaskById(taskId).getTaskAnswers();
+    }
 
     public void createTask(CreateTaskDTO dto) {
         try {
@@ -52,5 +59,14 @@ public class TaskService {
     public void deleteTaskById(Long taskId) {
         if (taskRepo.existsById(taskId)) taskRepo.deleteById(taskId);
         else throw new RuntimeException("Задание с id=" + taskId + "не существует.");
+    }
+
+    public void saveTask(Task task) {
+        try {
+            taskRepo.save(task);
+
+        } catch (RuntimeException e) {
+            log.error("Задание " + task.getName() + " не сохранёно. {}", e.getLocalizedMessage());
+        }
     }
 }
