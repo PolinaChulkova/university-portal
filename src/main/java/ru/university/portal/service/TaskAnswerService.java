@@ -34,4 +34,20 @@ public class TaskAnswerService {
             log.error("Ответ на задание не отправлен. {}" + e.getLocalizedMessage());
         }
     }
+
+    public void updateTaskAnswer(Long taskAnswerId, TaskAnswerDTO dto) {
+        try {
+            TaskAnswer answer = findTaskAnswerById(taskAnswerId);
+            answer.setComment(dto.getComment());
+            answer.setFileUri(dto.getFileUri());
+            taskAnswerRepo.save(answer);
+        } catch (Exception e) {
+            log.error("Ваш ответ не обновлён. {}" + e.getLocalizedMessage());
+        }
+    }
+
+    public TaskAnswer findTaskAnswerById(Long taskAnswerId) {
+        return taskAnswerRepo.findById(taskAnswerId).orElseThrow(() ->
+                new RuntimeException("Ваш ответ не существует"));
+    }
 }
