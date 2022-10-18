@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateRatingDTO;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.MessageResponse;
-import ru.university.portal.model.Rating;
 import ru.university.portal.service.RatingService;
 import ru.university.portal.service.TaskAnswerService;
 import ru.university.portal.service.TaskService;
