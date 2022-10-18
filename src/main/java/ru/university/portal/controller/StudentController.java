@@ -2,10 +2,7 @@ package ru.university.portal.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.dto.TaskAnswerDTO;
 import ru.university.portal.service.TaskAnswerService;
@@ -22,5 +19,13 @@ public class StudentController {
         taskAnswerService.sendTaskAnswer(dto);
         return ResponseEntity.ok().body(new MessageResponse(dto.getStudent().getFullName()) +
                 ", вы отправили ответ на задание");
+    }
+
+    @PutMapping("/update-answer/{taskAnswerId}")
+    public ResponseEntity<?> updateAnswer(@PathVariable Long taskAnswerId,
+                                              @RequestBody TaskAnswerDTO dto) {
+        taskAnswerService.updateTaskAnswer(taskAnswerId, dto);
+        return ResponseEntity.ok().body(new MessageResponse(dto.getStudent().getFullName() +
+                ", вы обновили свой ответ на задние"));
     }
 }
