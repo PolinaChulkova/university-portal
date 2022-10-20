@@ -26,7 +26,8 @@ public class SubjectService {
         try {
             Subject subject = new Subject();
             subject.setSubjectName(dto.getSubjectName());
-            subject.setTeacher(teacherService.findTeacherById(dto.getTeacherId()));
+            subject.getTeachers().add(teacherService.findTeacherById(dto.getTeacherId()));
+
             subjectRepo.save(subject);
 
         } catch (RuntimeException e) {
@@ -59,4 +60,8 @@ public class SubjectService {
               "Предмет с id=" + subjectId + " не существует.");
     }
 
+    public Subject findSubjectById(Long subjectId) {
+        return subjectRepo.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("Предмет с id=" + subjectId + "не найден."));
+    }
 }
