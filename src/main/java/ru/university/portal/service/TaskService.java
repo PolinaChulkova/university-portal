@@ -2,6 +2,8 @@ package ru.university.portal.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.UpdateTaskDTO;
@@ -18,8 +20,8 @@ public class TaskService {
 
     private final TaskRepo taskRepo;
 
-    public List<TaskAnswer> getTaskAnswers(Long taskId) {
-        return findTaskById(taskId).getTaskAnswers();
+    public List<TaskAnswer> getTaskAnswersForTeacher(Long taskId, Long teacherId) {
+        return findTaskByIdForTeacher(taskId, teacherId).getTaskAnswers();
     }
 
     public void createTask(CreateTaskDTO dto) {
@@ -54,6 +56,15 @@ public class TaskService {
             log.error("Задание " + dto.getName() + " не обновлёно. {}"
                     + e.getLocalizedMessage());
         }
+    }
+
+    public Task findTaskByIdForTeacher(Long taskId, Long teacherId) {
+        return taskRepo.findByIdAndAndTeacher_Id(taskId, teacherId).orElseThrow(()
+                -> new RuntimeException("Задание с id=" + taskId + "не найдено."));
+    }
+
+    public Page<Task> findAllTeacherTasks(Long teacherId, Pageable pageable) {
+        return taskRepo.findAllByTeacher_Id(teacherId, pageable);
     }
 
     public Task findTaskById(Long taskId) {
