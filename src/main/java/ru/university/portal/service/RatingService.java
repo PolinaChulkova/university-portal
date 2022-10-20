@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.CreateRatingDTO;
 import ru.university.portal.model.Rating;
+import ru.university.portal.model.Student;
+import ru.university.portal.model.Task;
 import ru.university.portal.repo.RatingRepo;
 
 @Service
@@ -18,12 +20,20 @@ public class RatingService {
     private final StudentService studentService;
 
     public void createRating(CreateRatingDTO dto) {
+        Task task = taskService.findTaskById(dto.getTaskId());
+        Student student = studentService.findStudentById(dto.getStudentId());
+
+        if (!task.getTeacher().getGroups().contains(student.getGroup()))
+            throw new RuntimeException("Невозможно поставить оценку студенту " + student.getFullName()
+                    + ", т.к. он закреплен за другим преподавателем");
+
         try {
             Rating rating = new Rating(
-                    dto.getMark(), dto.getComment(),
-                    taskService.findTaskById(dto.getTaskId()),
+                    dto.getMark(),
+                    dto.getComment(),
+                    task,
                     subjectService.findSubjectByName(dto.getSubjectName()),
-                    studentService.findStudentById(dto.getStudentId())
+                    student
             );
             ratingRepo.save(rating);
 

@@ -23,6 +23,11 @@ public class TaskService {
     }
 
     public void createTask(CreateTaskDTO dto) {
+
+        if (!dto.getTeacher().getGroups().contains(dto.getGroup()))
+            throw new RuntimeException("Невозможно создать задание для группы " + dto.getGroup().getName()
+            + ", т.к. она закреплена за другим преподавателем");
+
         try {
             Task task = new Task(dto);
             taskRepo.save(task);
