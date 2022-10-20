@@ -3,7 +3,7 @@ package ru.university.portal.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -24,7 +24,9 @@ public class Subject {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "teachers_subjects",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id"))
+    private Collection<Teacher> teachers;
 }
