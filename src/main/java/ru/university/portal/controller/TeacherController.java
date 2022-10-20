@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateRatingDTO;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.MessageResponse;
+import ru.university.portal.model.Teacher;
 import ru.university.portal.service.RatingService;
 import ru.university.portal.service.SubjectService;
 import ru.university.portal.service.TaskService;
@@ -18,13 +19,12 @@ import ru.university.portal.service.TeacherService;
 @RequiredArgsConstructor
 public class TeacherController {
 
-    private final TaskService taskService;
     private final RatingService ratingService;
     private final TeacherService teacherService;
     private final SubjectService subjectService;
 
-    @PostMapping("/subjects/{teacherId}")
-    public ResponseEntity<?> findTeacherSubjects(@PathVariable Long teacherId,
+    @PostMapping("/subjects/{teacherId}/{page}")
+    public ResponseEntity<?> findTeacherSubject(@PathVariable Long teacherId,
                                                  @PathVariable int page,
                                                  @RequestParam("key") String key) {
         Pageable pageable = PageRequest.of(page, 5);
@@ -37,23 +37,9 @@ public class TeacherController {
 //        return ResponseEntity.ok().body(teacherService.findTeacherSubjects(teacherId));
 //    }
 
-    @PostMapping("group/{teacherId}/{subjectId}")
-    public ResponseEntity<?> findStudentsBySubject(@PathVariable Long teacherId,
-                                                   @PathVariable Long subjectId) {
-        subjectService.deleteSubjectById(subjectId);
-        return ResponseEntity.ok().body(teacherService.findTeacherGroups(teacherId));
-    }
-
-    @PostMapping("/create-task")
-    public ResponseEntity<?> createTask(@RequestBody CreateTaskDTO dto) {
-        taskService.createTask(dto);
-        return ResponseEntity.ok().body(new MessageResponse(dto.getTeacher().getFullName() +
-                ", вы создали задание " + dto.getName()));
-    }
-
-    @GetMapping("/task-answers")
-    public ResponseEntity<?> getTaskAnswers(Long taskId) {
-        return ResponseEntity.ok().body(taskService.getTaskAnswers(taskId));
+    @PostMapping("group/{subjectId}")
+    public ResponseEntity<?> getStudentsByGroup(@PathVariable Long subjectId) {
+        return ResponseEntity.ok().body(subjectService.findSubjectById(subjectId).getGroup().getStudents());
     }
 
     @PostMapping("/create-rating")
