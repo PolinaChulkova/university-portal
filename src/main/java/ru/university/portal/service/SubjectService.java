@@ -19,7 +19,11 @@ public class SubjectService {
     private final GroupService groupService;
 
     public Page<Subject> findTeacherSubjects(Long teacherId, String key, Pageable pageable) {
-            return subjectRepo.findTeacherSubjects(teacherId, key, pageable);
+            return subjectRepo.findTeacherSubject(teacherId, key, pageable);
+    }
+
+    public Page<Subject> findAllTeacherSubjects(Long teacherId, Pageable pageable) {
+        return subjectRepo.findAllByTeacherId(teacherId, pageable);
     }
 
     public void createSubject(SubjectDto dto) {

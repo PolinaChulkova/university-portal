@@ -16,13 +16,21 @@ public class SubjectController {
 
     private final SubjectService subjectService;
 
-    @GetMapping("/all/{teacherId}/{page}")
-    public ResponseEntity<?> findTeacherSubjects(@PathVariable Long teacherId,
+    @GetMapping("/search/{teacherId}/{page}")
+    public ResponseEntity<?> searchTeacherSubject(@PathVariable Long teacherId,
                                                  @PathVariable int page,
                                                  @RequestParam("key") String key) {
         Pageable pageable = PageRequest.of(page, 5);
         return ResponseEntity.ok()
                 .body(subjectService.findTeacherSubjects(teacherId, key, pageable).getContent());
+    }
+
+    @GetMapping("/search-all/{teacherId}/{page}")
+    public ResponseEntity<?> searchAllTeacherSubjects(@PathVariable Long teacherId,
+                                                  @PathVariable int page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        return ResponseEntity.ok()
+                .body(subjectService.findAllTeacherSubjects(teacherId, pageable).getContent());
     }
 
     //    для админа
