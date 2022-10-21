@@ -16,10 +16,18 @@ public class SubjectController {
 
     private final SubjectService subjectService;
 
+    @GetMapping("/all-for-group/{groupId}/{page}")
+    public ResponseEntity<?> searchAllGroupSubjects(@PathVariable Long groupId,
+                                                    @PathVariable int page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        return ResponseEntity.ok()
+                .body(subjectService.findAllGroupSubject(groupId, pageable).getContent());
+    }
+
     @GetMapping("/search/{teacherId}/{page}")
     public ResponseEntity<?> searchTeacherSubject(@PathVariable Long teacherId,
-                                                 @PathVariable int page,
-                                                 @RequestParam("key") String key) {
+                                                  @PathVariable int page,
+                                                  @RequestParam("key") String key) {
         Pageable pageable = PageRequest.of(page, 5);
         return ResponseEntity.ok()
                 .body(subjectService.findTeacherSubjects(teacherId, key, pageable).getContent());
@@ -27,10 +35,18 @@ public class SubjectController {
 
     @GetMapping("/search-all/{teacherId}/{page}")
     public ResponseEntity<?> searchAllTeacherSubjects(@PathVariable Long teacherId,
-                                                  @PathVariable int page) {
+                                                      @PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 5);
         return ResponseEntity.ok()
                 .body(subjectService.findAllTeacherSubjects(teacherId, pageable).getContent());
+    }
+
+    //    для админа
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteSubject(Long subjectId) {
+        subjectService.deleteSubjectById(subjectId);
+        return ResponseEntity.ok().body(new MessageResponse("Предмет с id="
+                + subjectId + " удалён"));
     }
 
     //    для админа
@@ -53,7 +69,7 @@ public class SubjectController {
     //    для админа
     @PostMapping("/add-group/{subjectName}/{groupName}")
     public ResponseEntity<?> addGroupToSubject(@PathVariable String subjectName,
-                                                 @PathVariable String groupName) {
+                                               @PathVariable String groupName) {
         subjectService.addGroupToSubject(groupName, subjectName);
         return ResponseEntity.ok().body(new MessageResponse("К предмету \"" + subjectName + "\" " +
                 "добавлена группа " + groupName));

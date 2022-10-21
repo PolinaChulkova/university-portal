@@ -18,6 +18,9 @@ public interface SubjectRepo extends JpaRepository<Subject, Long> {
     @Query(value = "SELECT s FROM Subject s JOIN s.teachers t WHERE t.id = ?1")
     Page<Subject> findAllByTeacherId(Long teacherId, Pageable pageable);
 
+    @Query(value = "SELECT s FROM Subject s JOIN s.groups g WHERE g.id = ?1")
+    Page<Subject> findAllByGroupId(Long groupId, Pageable pageable);
+
     Page<Subject> findAll(Pageable pageable);
 
     Optional<Subject> findById(Long id);

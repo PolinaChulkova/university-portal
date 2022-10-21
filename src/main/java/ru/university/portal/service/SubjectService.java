@@ -26,6 +26,10 @@ public class SubjectService {
         return subjectRepo.findAllByTeacherId(teacherId, pageable);
     }
 
+    public Page<Subject> findAllGroupSubject(Long groupId, Pageable pageable) {
+        return subjectRepo.findAllByGroupId(groupId, pageable);
+    }
+
     public void createSubject(SubjectDto dto) {
         try {
             Subject subject = new Subject();
@@ -43,7 +47,7 @@ public class SubjectService {
     public void addGroupToSubject(String groupName, String subjectName) {
         try {
             Subject subject = findSubjectByName(subjectName);
-            subject.setGroup(groupService.findGroupByGroupName(groupName));
+            subject.getGroups().add(groupService.findGroupByGroupName(groupName));
 
             subjectRepo.save(subject);
 
