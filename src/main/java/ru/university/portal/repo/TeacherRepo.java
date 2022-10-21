@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface TeacherRepo extends JpaRepository<Teacher, Long> {
 
+    Optional<Teacher> findByEmail(String email);
+
     Optional<Teacher> findById(Long id);
 
     Page<Teacher> findAll(Pageable pageable);

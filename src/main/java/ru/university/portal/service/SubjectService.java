@@ -40,9 +40,25 @@ public class SubjectService {
         try {
             Subject subject = findSubjectByName(subjectName);
             subject.setGroup(groupService.findGroupByGroupName(groupName));
+
             subjectRepo.save(subject);
+
         } catch (RuntimeException e) {
             log.error("Не удалось добавить группу " +  groupName
+                    + " к предмету " + subjectName + ". {}"
+                    + e.getLocalizedMessage());
+        }
+    }
+
+    public void addTeacherToSubject(String email, String subjectName) {
+        try {
+            Subject subject = findSubjectByName(subjectName);
+            subject.getTeachers().add(teacherService.findTeacherByEmail(email));
+
+            subjectRepo.save(subject);
+
+        } catch (RuntimeException e) {
+            log.error("Не удалось добавить преподавателя с email: " +  email
                     + " к предмету " + subjectName + ". {}"
                     + e.getLocalizedMessage());
         }

@@ -31,6 +31,11 @@ public class TeacherService {
                 .orElseThrow(() -> new RuntimeException("Преподаватель с id=" + teacherId + "не найден."));
     }
 
+    public Teacher findTeacherByEmail(String email) {
+        return teacherRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Преподаватель с email: " + email + "не найден."));
+    }
+
     public void createTeacher(TeacherDTO dto) {
         try {
             Teacher teacher = new Teacher(dto);
