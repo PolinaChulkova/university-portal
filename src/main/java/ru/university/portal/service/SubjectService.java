@@ -72,6 +72,32 @@ public class SubjectService {
         }
     }
 
+    public void detachTeacherFromSubject(String email, String subjectName) {
+        try {
+            Subject subject = findSubjectByName(subjectName);
+            subject.getTeachers().remove(teacherService.findTeacherByEmail(email));
+            subjectRepo.save(subject);
+
+        } catch (RuntimeException e) {
+            log.error("Не удалось открепить преподавателя с email: " +  email
+                    + " от предмета " + subjectName + ". {}"
+                    + e.getLocalizedMessage());
+        }
+    }
+
+    public void detachGroupFromSubject(String groupName, String subjectName) {
+        try {
+            Subject subject = findSubjectByName(subjectName);
+            subject.getGroups().remove(groupService.findGroupByGroupName(groupName));
+            subjectRepo.save(subject);
+
+        } catch (RuntimeException e) {
+            log.error("Не удалось открепить группу " +  groupName
+                    + " от предмета " + subjectName + ". {}"
+                    + e.getLocalizedMessage());
+        }
+    }
+
     public Subject findSubjectByName(String name) {
         return subjectRepo.findBySubjectName(name)
                 .orElseThrow(() -> new RuntimeException("Не удалось найти предмет с именем "

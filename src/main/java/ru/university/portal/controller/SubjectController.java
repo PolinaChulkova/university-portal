@@ -16,7 +16,7 @@ public class SubjectController {
 
     private final SubjectService subjectService;
 
-    @GetMapping("/all-for-group/{groupId}/{page}")
+    @GetMapping("/student/all/{groupId}/{page}")
     public ResponseEntity<?> searchAllGroupSubjects(@PathVariable Long groupId,
                                                     @PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 5);
@@ -24,7 +24,7 @@ public class SubjectController {
                 .body(subjectService.findAllGroupSubject(groupId, pageable).getContent());
     }
 
-    @GetMapping("/search/{teacherId}/{page}")
+    @GetMapping("/teacher/search/{teacherId}/{page}")
     public ResponseEntity<?> searchTeacherSubject(@PathVariable Long teacherId,
                                                   @PathVariable int page,
                                                   @RequestParam("key") String key) {
@@ -33,7 +33,7 @@ public class SubjectController {
                 .body(subjectService.findTeacherSubjects(teacherId, key, pageable).getContent());
     }
 
-    @GetMapping("/search-all/{teacherId}/{page}")
+    @GetMapping("/teacher/all/{teacherId}/{page}")
     public ResponseEntity<?> searchAllTeacherSubjects(@PathVariable Long teacherId,
                                                       @PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 5);
@@ -73,5 +73,23 @@ public class SubjectController {
         subjectService.addGroupToSubject(groupName, subjectName);
         return ResponseEntity.ok().body(new MessageResponse("К предмету \"" + subjectName + "\" " +
                 "добавлена группа " + groupName));
+    }
+
+    //    для админа
+    @DeleteMapping("/delete-teacher/{subjectName}/{teacherEmail}")
+    public ResponseEntity<?> detachTeacherFromSubject(@PathVariable String subjectName,
+                                                 @PathVariable String teacherEmail) {
+        subjectService.detachTeacherFromSubject(teacherEmail, subjectName);
+        return ResponseEntity.ok().body(new MessageResponse("Преподаватель с email: " + teacherEmail
+                + " откреплён от предмета \"" + subjectName + "\""));
+    }
+
+    //    для админа
+    @DeleteMapping("/delete-group/{subjectName}/{groupName}")
+    public ResponseEntity<?> detachGroupFromSubject(@PathVariable String subjectName,
+                                                      @PathVariable String groupName) {
+        subjectService.detachGroupFromSubject(groupName, subjectName);
+        return ResponseEntity.ok().body(new MessageResponse("Группа " + groupName
+                + " откреплёна от предмета \"" + subjectName + "\""));
     }
 }
