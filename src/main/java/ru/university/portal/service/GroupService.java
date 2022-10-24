@@ -40,24 +40,26 @@ public class GroupService {
         }
     }
 
-    public void addStudentToGroup(Group group, Long studentId) {
+    public void addStudentToGroup(Long groupId, Long studentId) {
         try {
+            Group group = findGroupByGroupId(groupId);
             group.getStudents().add(studentService.findStudentById(studentId));
             groupRepo.save(group);
 
         } catch (RuntimeException e) {
-            log.error("Студент с id= " + studentId + " не добавлен в группу " + group.getName() + ". {}"
+            log.error("Студент с id= " + studentId + " не добавлен в группу с id=" + groupId + ". {}"
                     + e.getLocalizedMessage());
         }
     }
 
-    public void deleteStudentFromGroup(Group group, Long studentId) {
+    public void deleteStudentFromGroup(Long groupId, Long studentId) {
         try {
+            Group group = findGroupByGroupId(groupId);
             group.getStudents().remove(studentService.findStudentById(studentId));
             groupRepo.save(group);
 
         } catch (RuntimeException e) {
-            log.error("Студент с id= " + studentId + " не удалён из группы " + group.getName() + ". {}"
+            log.error("Студент с id= " + studentId + " не удалён из группы с id=" + groupId + ". {}"
                     + e.getLocalizedMessage());
         }
     }
@@ -72,5 +74,16 @@ public class GroupService {
         if (groupRepo.existsByName(groupName)) groupRepo.deleteByName(groupName);
         else throw new RuntimeException("Нельзя совершить удаление! " +
                 "Группа с именем " + groupName + " не существует.");
+    }
+
+    public void deleteGroupByGroupId(Long groupId) {
+        if (groupRepo.existsById(groupId)) groupRepo.deleteById(groupId);
+        else throw new RuntimeException("Нельзя совершить удаление! " +
+                "Группа с id= " + groupId + " не существует.");
+    }
+
+    public Group findGroupByGroupId(Long groupId) {
+        return groupRepo.findById(groupId).orElseThrow(() -> new RuntimeException("Группа с id= "
+                + groupId + " не найдена."));
     }
 }
