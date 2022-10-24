@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.dto.TeacherDTO;
-import ru.university.portal.service.RatingService;
-import ru.university.portal.service.SubjectService;
 import ru.university.portal.service.TeacherService;
 
 @RestController
@@ -14,13 +12,11 @@ import ru.university.portal.service.TeacherService;
 @RequiredArgsConstructor
 public class TeacherController {
 
-    private final RatingService ratingService;
     private final TeacherService teacherService;
-    private final SubjectService subjectService;
 
     @GetMapping("/groups/{teacherId}")
     public ResponseEntity<?> findTeacherGroups(@PathVariable Long teacherId) {
-        return ResponseEntity.ok().body(teacherService.findTeacherGroups(teacherId));
+        return ResponseEntity.ok().body(teacherService.findTeacherById(teacherId).getGroups());
     }
 
     @GetMapping("/{teacherId}")

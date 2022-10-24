@@ -4,13 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.TeacherDTO;
-import ru.university.portal.model.Group;
-import ru.university.portal.model.Subject;
 import ru.university.portal.model.Teacher;
 import ru.university.portal.repo.TeacherRepo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +13,6 @@ import java.util.List;
 public class TeacherService {
 
     private final TeacherRepo teacherRepo;
-    private final SubjectService subjectService;
-
-    public List<Group> findTeacherGroups(Long teacherId) {
-        List<Group> groups = new ArrayList<>();
-        findTeacherById(teacherId).getSubjects().forEach(s -> groups.add(s.getGroup()));
-        return groups;
-    }
 
     public Teacher findTeacherById(Long teacherId) {
         return teacherRepo.findById(teacherId)
