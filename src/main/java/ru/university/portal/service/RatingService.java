@@ -38,7 +38,7 @@ public class RatingService {
             ratingRepo.save(rating);
 
         } catch (RuntimeException e) {
-            log.error("Оценка студенту с id=: " + dto.getStudentId() + " не поставлена. {}"
+            log.error("Оценка студенту с id= " + dto.getStudentId() + " не поставлена. {}"
                     + e.getLocalizedMessage());
         }
     }

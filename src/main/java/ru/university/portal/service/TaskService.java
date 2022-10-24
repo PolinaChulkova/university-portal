@@ -32,6 +32,7 @@ public class TaskService {
 
         try {
             Task task = new Task(dto);
+//            создать оповещение студентов группы
             taskRepo.save(task);
 
         } catch (RuntimeException e) {

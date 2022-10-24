@@ -18,9 +18,5 @@ public class TeacherController {
     private final TeacherService teacherService;
     private final SubjectService subjectService;
 
-    @PostMapping("/create-rating")
-    public ResponseEntity<?> createRating(@RequestBody CreateRatingDTO dto) {
-        ratingService.createRating(dto);
-        return ResponseEntity.ok().body(new MessageResponse("Выставлена оценка"));
-    }
+
 }
