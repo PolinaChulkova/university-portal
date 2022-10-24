@@ -1,8 +1,6 @@
 package ru.university.portal.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateRatingDTO;
@@ -19,13 +17,6 @@ public class TeacherController {
     private final RatingService ratingService;
     private final TeacherService teacherService;
     private final SubjectService subjectService;
-
-
-
-    @PostMapping("group/{subjectId}")
-    public ResponseEntity<?> getStudentsByGroup(@PathVariable Long subjectId) {
-        return ResponseEntity.ok().body(subjectService.findSubjectById(subjectId).getGroup().getStudents());
-    }
 
     @PostMapping("/create-rating")
     public ResponseEntity<?> createRating(@RequestBody CreateRatingDTO dto) {
