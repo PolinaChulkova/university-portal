@@ -16,6 +16,12 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    @GetMapping("/student-task/{studentId}/{taskId)")
+    public ResponseEntity<?> getStudentTask(@PathVariable Long studentId,
+                                            @PathVariable Long taskId) {
+
+    }
+
     @GetMapping("/task/{taskId}/{teacherId}")
     public ResponseEntity<?> getTeacherTask(@PathVariable Long taskId,
                                             @PathVariable Long teacherId) {
@@ -34,12 +40,6 @@ public class TaskController {
         taskService.createTask(dto);
         return ResponseEntity.ok().body(new MessageResponse(dto.getTeacher().getFullName() +
                 ", вы создали задание " + dto.getName()));
-    }
-
-    @GetMapping("/task-answers/{teacherId}/{taskId}")
-    public ResponseEntity<?> getTaskAnswersForTeacher(@PathVariable Long teacherId,
-                                                      @PathVariable Long taskId) {
-        return ResponseEntity.ok().body(taskService.getTaskAnswersForTeacher(taskId, teacherId));
     }
 
     //    для админа

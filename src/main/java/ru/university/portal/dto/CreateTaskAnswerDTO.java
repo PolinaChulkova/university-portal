@@ -9,7 +9,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @Getter@Setter
-public class TaskAnswerDTO {
+public class CreateTaskAnswerDTO {
     private String comment;
     private Set<String> fileUri;
     //    после созании Security студент будет получаться из Principal
