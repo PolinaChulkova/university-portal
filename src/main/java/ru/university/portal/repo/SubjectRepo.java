@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.university.portal.model.Subject;
 
 import java.util.Optional;
@@ -12,12 +13,15 @@ import java.util.Optional;
 @Repository
 public interface SubjectRepo extends JpaRepository<Subject, Long> {
 
+    @Transactional
     @Query(value = "SELECT s FROM Subject s JOIN s.teachers t WHERE t.id = ?1 AND s.subjectName LIKE %?1%")
     Page<Subject> findTeacherSubject(Long teacherId, String key, Pageable pageable);
 
+    @Transactional
     @Query(value = "SELECT s FROM Subject s JOIN s.teachers t WHERE t.id = ?1")
     Page<Subject> findAllByTeacherId(Long teacherId, Pageable pageable);
 
+    @Transactional
     @Query(value = "SELECT s FROM Subject s JOIN s.groups g WHERE g.id = ?1")
     Page<Subject> findAllByGroupId(Long groupId, Pageable pageable);
 
