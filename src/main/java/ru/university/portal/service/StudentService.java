@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.StudentDTO;
-import ru.university.portal.model.Group;
 import ru.university.portal.model.Student;
 import ru.university.portal.repo.StudentRepo;
 
@@ -14,10 +13,11 @@ import ru.university.portal.repo.StudentRepo;
 public class StudentService {
 
     private final StudentRepo studentRepo;
+    private final GroupService groupService;
 
-    public void createStudent(StudentDTO dto, Group group) {
+    public void createStudent(StudentDTO dto, Long groupId) {
         try {
-            Student student = new Student(dto, group);
+            Student student = new Student(dto, groupService.findGroupByGroupId(groupId));
             studentRepo.save(student);
 
         } catch (RuntimeException e) {
