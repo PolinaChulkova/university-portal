@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.UpdateTaskDTO;
 import ru.university.portal.model.Task;
-import ru.university.portal.model.TaskAnswer;
 import ru.university.portal.repo.TaskRepo;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +16,7 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepo taskRepo;
-
-    public List<TaskAnswer> getTaskAnswersForTeacher(Long taskId, Long teacherId) {
-        return findTaskByIdForTeacher(taskId, teacherId).getTaskAnswers();
-    }
+    private final StudentService studentService;
 
     public void createTask(CreateTaskDTO dto) {
 
@@ -45,7 +39,10 @@ public class TaskService {
         try {
             Task task = findTaskById(taskId);
 
-//       обновления можно сделать через query в repository
+            if (!task.getTeacher().equals(dto.getTeacher()))
+                throw new RuntimeException("Невозможно обновить задание" + dto.getName()
+                        + ", т.к. оно создано другим преподавателем");
+
             task.setName(dto.getName());
             task.setDescription(dto.getDescription());
             task.setDeadLine(dto.getDeadLine());
@@ -59,8 +56,14 @@ public class TaskService {
         }
     }
 
+    public Task findTaskByIdForStudent(Long taskId, Long studentId) {
+        Long groupId = studentService.findStudentById(studentId).getGroup().getId();
+        return taskRepo.findByIdAndGroup_Id(taskId, groupId).orElseThrow(()
+                -> new RuntimeException("Задание с id=" + taskId + "не найдено."));
+    }
+
     public Task findTaskByIdForTeacher(Long taskId, Long teacherId) {
-        return taskRepo.findByIdAndAndTeacher_Id(taskId, teacherId).orElseThrow(()
+        return taskRepo.findByIdAndTeacher_Id(taskId, teacherId).orElseThrow(()
                 -> new RuntimeException("Задание с id=" + taskId + "не найдено."));
     }
 

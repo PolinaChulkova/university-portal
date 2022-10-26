@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.MessageResponse;
+import ru.university.portal.dto.UpdateTaskDTO;
 import ru.university.portal.service.TaskService;
 
 @RestController
@@ -19,7 +20,7 @@ public class TaskController {
     @GetMapping("/student-task/{studentId}/{taskId)")
     public ResponseEntity<?> getStudentTask(@PathVariable Long studentId,
                                             @PathVariable Long taskId) {
-
+        return ResponseEntity.ok().body(taskService.findTaskByIdForStudent(taskId, studentId));
     }
 
     @GetMapping("/task/{taskId}/{teacherId}")
@@ -42,6 +43,13 @@ public class TaskController {
                 ", вы создали задание " + dto.getName()));
     }
 
+    @PutMapping("/update/{taskId}")
+    public ResponseEntity<?> updateTeacherTask(@PathVariable Long taskId,
+                                               @RequestBody UpdateTaskDTO dto) {
+        taskService.updateTask(taskId, dto);
+        return ResponseEntity.ok().body(new MessageResponse("Задание " + dto.getName() + " обновлено."));
+    }
+
     //    для админа
     @GetMapping("/task-answers/{taskId}")
     public ResponseEntity<?> getTask(@PathVariable Long taskId) {
@@ -49,8 +57,9 @@ public class TaskController {
     }
 
     //    для админа
-    @GetMapping("/task-answers/{taskId}")
-    public ResponseEntity<?> getTaskAnswers(@PathVariable Long taskId) {
-        return ResponseEntity.ok().body(taskService.findTaskById(taskId).getTaskAnswers());
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long taskId) {
+        taskService.deleteTaskById(taskId);
+        return ResponseEntity.ok().body(new MessageResponse("Задание с id=" + taskId + " удалено."));
     }
 }
