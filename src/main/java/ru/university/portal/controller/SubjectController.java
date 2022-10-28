@@ -1,5 +1,6 @@
 package ru.university.portal.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,7 @@ import ru.university.portal.service.SubjectService;
 
 @RestController
 @RequestMapping("/subject")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class SubjectController {
 
     private final SubjectService subjectService;

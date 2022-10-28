@@ -33,11 +33,10 @@ public class Student {
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<Rating> rating;
 
-    public Student(StudentDTO dto, Group group) {
+    public Student(StudentDTO dto) {
         this.fullName = dto.getFullName();
         this.email = dto.getEmail();
         this.password = dto.getPassword();
         this.phoneNum = dto.getPhoneNum();
-        this.group = group;
     }
 }

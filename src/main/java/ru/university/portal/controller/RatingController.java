@@ -1,5 +1,6 @@
 package ru.university.portal.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,7 @@ import ru.university.portal.service.RatingService;
 
 @RestController
 @RequestMapping("/rating")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RatingController {
 
     private final RatingService ratingService;

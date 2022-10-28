@@ -1,5 +1,6 @@
 package ru.university.portal.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import ru.university.portal.service.TaskAnswerService;
 
 @RestController
 @RequestMapping("/task-answer")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class TaskAnswerController {
 
     private final TaskAnswerService taskAnswerService;

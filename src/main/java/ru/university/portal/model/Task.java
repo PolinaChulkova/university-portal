@@ -29,7 +29,7 @@ public class Task {
     private Date deadLine;
 
     @ElementCollection
-    @CollectionTable(name = "file_uri", joinColumns = @JoinColumn(name = "task_id"))
+    @CollectionTable(name = "tasks_files", joinColumns = @JoinColumn(name = "task_id"))
     @Column(name = "file_uri")
     private Set<String> fileUri;
 

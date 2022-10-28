@@ -1,5 +1,6 @@
 package ru.university.portal.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,12 +13,12 @@ import ru.university.portal.service.TaskService;
 
 @RestController
 @RequestMapping("/task")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping("/student-task/{studentId}/{taskId)")
+    @GetMapping("/student-task/{studentId}/{taskId}")
     public ResponseEntity<?> getStudentTask(@PathVariable Long studentId,
                                             @PathVariable Long taskId) {
         return ResponseEntity.ok().body(taskService.findTaskByIdForStudent(taskId, studentId));

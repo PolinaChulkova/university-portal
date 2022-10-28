@@ -1,5 +1,6 @@
 package ru.university.portal.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,7 @@ import ru.university.portal.service.StudentService;
 
 @RestController
 @RequestMapping("/student")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class StudentController {
 
     private final StudentService studentService;
@@ -20,9 +21,8 @@ public class StudentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createStudent(@RequestParam("groupId") Long groupId,
-                                           @RequestBody StudentDTO dto) {
-        studentService.createStudent(dto, groupId);
+    public ResponseEntity<?> createStudent(@RequestBody StudentDTO dto) {
+        studentService.createStudent(dto);
         return ResponseEntity.ok().body(new MessageResponse("Создан студент с email: " + dto.getEmail()));
     }
 

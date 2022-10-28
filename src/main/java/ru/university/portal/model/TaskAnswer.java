@@ -23,7 +23,7 @@ public class TaskAnswer {
     private Date date = new Date();
 
     @ElementCollection
-    @CollectionTable(name = "file_uri", joinColumns = @JoinColumn(name = "task_answer_id"))
+    @CollectionTable(name = "answers_files", joinColumns = @JoinColumn(name = "task_answer_id"))
     @Column(name = "file_uri")
     private Set<String> fileUri;
 

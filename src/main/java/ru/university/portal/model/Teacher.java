@@ -41,8 +41,10 @@ public class Teacher {
     private List<Subject> subjects;
 
 //    группа не знает кто ее препод, поэтому связь OneToMany
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "teachers_groups",
+    joinColumns = @JoinColumn(name = "teacher_id"),
+    inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Collection<Group> groups;
 
     public Teacher(TeacherDTO dto) {

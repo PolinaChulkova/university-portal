@@ -13,11 +13,10 @@ import ru.university.portal.repo.StudentRepo;
 public class StudentService {
 
     private final StudentRepo studentRepo;
-    private final GroupService groupService;
 
-    public void createStudent(StudentDTO dto, Long groupId) {
+    public void createStudent(StudentDTO dto) {
         try {
-            Student student = new Student(dto, groupService.findGroupByGroupId(groupId));
+            Student student = new Student(dto);
             studentRepo.save(student);
 
         } catch (RuntimeException e) {
