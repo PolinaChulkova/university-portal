@@ -1,0 +1,55 @@
+INSERT INTO SUBJECT (subject_name)
+VALUES ('Математика'), ('Экономическая теория'), ('Государственное управление'), ('Английский'),
+       ('Стратегический ананлиз'), ('ДКБ');
+
+INSERT INTO group_subject (group_id, subject_id)
+VALUES
+       (1, 1), (1, 2), (1, 4), (1, 6),
+       (2, 3), (2, 5), (2, 6),
+       (3, 1), (3, 2), (3, 3), (3, 4),
+       (4, 2), (4, 3), (4, 5),
+       (5, 1), (5, 2), (5, 4), (5, 5),
+       (6, 1), (6, 2), (6, 4), (6, 5),
+       (7, 1), (7, 2), (7, 4), (7, 5),
+       (8, 1), (8, 2), (8, 3), (8, 4),
+       (9, 1), (9, 2), (9, 3), (9, 4);
+
+INSERT INTO STUDENT(full_name, email, password, phone_num, group_id)
+VALUES
+       ('Чулкова Полина', 'shelkova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89923338778', 1),
+       ('Удовенко Виктория', 'udovenko@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '83333333333', 1),
+       ('Тоноян Акоп', 'tonoyan@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89999999999', 1),
+       ('Ямщикова Екатерина', 'yamshikova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81111111111', 1),
+       ('Тарасова Дарья', 'tarasova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '86666666666', 1),
+       ('Пупков Виктор', 'pupkov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '82222222222', 2),
+       ('Шалаев Иван', 'shalaev@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81212121212', 2),
+       ('Бухман Нина', 'bushman@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '83434343434', 2),
+       ('Раков Тимофей', 'rakov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '86767676767', 2),
+       ('Шишкова Анастачсия', 'shishkova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '88989898989', 3),
+       ('Чебурекова Соня', 'cheburekova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80909090909', 3),
+       ('Бургерова Татьяна', 'burgerova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81414141414', 3),
+       ('Пивоваров Артём', 'pivovarov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '86767676789', 3),
+       ('Танцулька Ольга', 'tanzulkina@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '84747474789', 4),
+       ('Гольцова Анастасия', 'golzova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '83636363678', 4),
+       ('Шальнова Полина', 'shalnova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '86060606060', 4),
+       ('Мелкова Арина', 'melkova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '86868686391', 4),
+       ('Смирнова Наталья', 'smirnova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81234567891', 5),
+       ('Смирнов Виктор', 'smirnov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80987654321', 5),
+       ('Булочкин Андрей', 'bulochkina@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '88769584620', 5),
+       ('Пипиркин Илья', 'pipirkin@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80000022222', 5),
+       ('Красоткова Полина', 'krasotkova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '6767689542', 6),
+       ('Умняшкина Полина', 'umnyashkina@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80192100000', 6),
+       ('Купцова Валерия', 'kuptcova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89999933333', 6),
+       ('Театралов Арсен', 'teatralkov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81111100000', 6),
+       ('Милашова Анастасия', 'milashova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '8768593009', 7),
+       ('Скисалов Николай', 'skisalov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81111166666', 7),
+       ('Табаков Виталий', 'tabakof@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81234512345', 7),
+       ('Шабитов Максим', 'shabitov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80987609876', 7),
+       ('Вольнов Кирилл', 'volynov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '86789056789', 8),
+       ('Дубкова Наталья', 'dubkova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '86789054387', 8),
+       ('Николаева Дарья', 'nikolaeva@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81234509871', 8),
+       ('Лукоянов Алексей', 'lukoyanov@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '88765433456', 8),
+       ('Леснова Арина', 'lesnova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80101939375', 9),
+       ('Цветкова Светлана', 'zvetkova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '83939394848', 9),
+       ('Дуркова Ксения', 'durkova@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '85656574747', 9),
+       ('Шишкина Наталья', 'shishkina@gmail.com', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81010383847', 9);

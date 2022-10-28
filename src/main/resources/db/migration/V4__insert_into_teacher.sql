@@ -1,0 +1,17 @@
+INSERT INTO TEACHER (academic_degree, email, full_name, password, phone_num) VALUES
+('Доцент', 'perkov@gmail.com', 'Перков Алексей Александрович', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743251'),
+('Профессор', 'arkova@gmail.com', 'Аркова Наталья Викторовна', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '81029564702'),
+('Профессор', 'shishkin1@gmail.com', 'Шишкин Измаил Валерьевич', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80002223387'),
+('Доцент', 'smorshkova2@gmail.com', 'Сморчкова Анна Николаевна', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '82227774492'),
+('Старший преподаватель', 'smirnova1@gmail.com', 'Смирнова Наталья Валерьевна', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80294876583'),
+('Старший преподаватель', 'pashkov2@gmail.com', 'Пашков Алексей Александрович', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743000'),
+('Старший преподаватель', 'saibov4@gmail.com', 'Саибов Али Мурзунбекович', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '80912638402'),
+('Ассистент', 'shorov3@gmail.com', 'Шоров Альберт Вечеславович', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086700000'),
+('Ассистент', 'solntseva1@gmail.com', 'Солнцева Ольга Викторовна', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89489301749'),
+('Ассистент', 'ershov3@gmail.com', 'Ершов Алексей Николаевич', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743250'),
+('Доцент', 'morozova1@gmail.com', 'Мозова Людмила Валрьевна', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743252'),
+('Доцент', 'morozov2@gmail.com', 'Морозов Сергей Александрович', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743256'),
+('Доцент', 'peshkov5@gmail.com', 'Пешков Алексей Александрович', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743254'),
+('Профессор', 'korovina11@gmail.com', 'Коровина Анна Сергеевна', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743255'),
+('Доцент', 'mishurin@gmail.com', 'Мичурин Илья Александрович', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743257'),
+('Доцент', 'murkov0@gmail.com', 'Мурков Лука Корнеевич', '$2y$10$QYbwMlooApbB4E.8jLBHvuNBuNlBY5jNmRCBtydu4uuYtkMNqCnEK', '89086743259');
