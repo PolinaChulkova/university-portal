@@ -1,7 +1,7 @@
 package ru.university.portal.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.MessageResponse;
@@ -11,6 +11,7 @@ import ru.university.portal.service.TeacherService;
 @RestController
 @RequestMapping("/teacher")
 @AllArgsConstructor
+@Slf4j
 public class TeacherController {
 
     private final TeacherService teacherService;
@@ -27,18 +28,36 @@ public class TeacherController {
 
     //    для админа
     @PostMapping("/create")
-    public ResponseEntity<?> findTeacherGroups(@RequestBody TeacherDTO dto) {
-        teacherService.createTeacher(dto);
-        return ResponseEntity.ok().body(new MessageResponse("Создан преподаватель с email: " + dto.getEmail()));
+    public ResponseEntity<?> createTeacher(@RequestBody TeacherDTO dto) {
+        try {
+            teacherService.createTeacher(dto);
+            return ResponseEntity.ok().body(new MessageResponse("Создан преподаватель с email: " + dto.getEmail()));
+
+        } catch (RuntimeException e) {
+            log.error("Преподаватель с email: " + dto.getEmail() + " не создан. {}"
+                    + e.getLocalizedMessage());
+
+            return ResponseEntity.badRequest().body(new MessageResponse("Преподаватель с email: " + dto.getEmail())
+                    + " не создан. Error: " + e.getLocalizedMessage());
+        }
     }
 
     //    для админа
     @PutMapping("/update/{teacherId}")
-    public ResponseEntity<?> findTeacherGroups(@PathVariable Long teacherId,
-                                               @RequestBody TeacherDTO dto) {
-        teacherService.updateTeacher(teacherId, dto);
-        return ResponseEntity.ok().body(new MessageResponse("Обновлён преподаватель с email: "
-                + dto.getEmail()));
+    public ResponseEntity<?> updateTeacher(@PathVariable Long teacherId,
+                                           @RequestBody TeacherDTO dto) {
+        try {
+            teacherService.updateTeacher(teacherId, dto);
+            return ResponseEntity.ok().body(new MessageResponse("Обновлён преподаватель с email: "
+                    + dto.getEmail()));
+
+        } catch (RuntimeException e) {
+            log.error("Преподватель с Id= " + teacherId + " не обновлён. {}"
+                    + e.getLocalizedMessage());
+
+            return ResponseEntity.badRequest().body(new MessageResponse("Преподаватель с email: "
+                    + dto.getEmail() + " не обновлён. Error: ") + e.getLocalizedMessage());
+        }
     }
 
     //    для админа

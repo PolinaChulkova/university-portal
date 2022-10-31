@@ -25,14 +25,8 @@ public class TeacherService {
     }
 
     public void createTeacher(TeacherDTO dto) {
-        try {
             Teacher teacher = new Teacher(dto);
             teacherRepo.save(teacher);
-
-        } catch (RuntimeException e) {
-            log.error("Преподаватель с email: " + dto.getEmail() + " не создан. {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
     public void updateTeacher(Long teacherId, TeacherDTO dto) {
