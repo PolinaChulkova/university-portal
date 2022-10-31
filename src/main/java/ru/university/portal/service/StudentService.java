@@ -1,7 +1,6 @@
 package ru.university.portal.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.StudentDTO;
 import ru.university.portal.model.Student;
@@ -9,24 +8,16 @@ import ru.university.portal.repo.StudentRepo;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class StudentService {
 
     private final StudentRepo studentRepo;
 
     public void createStudent(StudentDTO dto) {
-        try {
             Student student = new Student(dto);
             studentRepo.save(student);
-
-        } catch (RuntimeException e) {
-            log.error("Студент с email: " + dto.getEmail() + " не создан. {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
     public void updateStudent(Long studentId, StudentDTO dto) {
-        try {
             Student student = findStudentById(studentId);
             student.setFullName(dto.getFullName());
             student.setEmail(dto.getEmail());
@@ -34,11 +25,6 @@ public class StudentService {
             student.setPhoneNum(dto.getPhoneNum());
 
             studentRepo.save(student);
-
-        } catch (RuntimeException e) {
-            log.error("Студент с Id= " + studentId + " не обновлён. {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
     public Student findStudentByEmail(String studentEmail) {
