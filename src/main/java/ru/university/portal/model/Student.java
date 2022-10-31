@@ -1,5 +1,7 @@
 package ru.university.portal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import ru.university.portal.dto.StudentDTO;
 
@@ -26,10 +28,12 @@ public class Student {
     @Column(name = "phone_num")
     private String phoneNum;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<Rating> rating;
 

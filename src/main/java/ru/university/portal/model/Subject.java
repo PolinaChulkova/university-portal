@@ -1,5 +1,6 @@
 package ru.university.portal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,12 +20,14 @@ public class Subject {
     @Column(name = "subject_name")
     private String subjectName;
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "groups_subjects",
             joinColumns = @JoinColumn(name = "subject_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Collection<Group> groups;
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "teachers_subjects",
             joinColumns = @JoinColumn(name = "subject_id"),

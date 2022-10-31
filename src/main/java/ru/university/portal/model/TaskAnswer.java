@@ -1,5 +1,6 @@
 package ru.university.portal.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class TaskAnswer {
     @JoinColumn(name = "student_id")
     private Student student;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_id")
     private Task task;

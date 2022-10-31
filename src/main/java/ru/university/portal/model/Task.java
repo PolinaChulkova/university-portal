@@ -1,5 +1,7 @@
 package ru.university.portal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import ru.university.portal.dto.CreateTaskDTO;
 
@@ -33,6 +35,7 @@ public class Task {
     @Column(name = "file_uri")
     private Set<String> fileUri;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
@@ -41,6 +44,7 @@ public class Task {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<TaskAnswer> taskAnswers;
 

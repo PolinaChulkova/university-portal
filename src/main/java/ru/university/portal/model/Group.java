@@ -1,5 +1,7 @@
 package ru.university.portal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,12 +23,15 @@ public class Group {
     @Column(name = "group_name", unique = true)
     private String name;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private List<Student> students = new ArrayList<>();
 
+    @JsonBackReference
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private List<Task> tasks;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "groups_subjects",
             joinColumns = @JoinColumn(name = "group_id"),
