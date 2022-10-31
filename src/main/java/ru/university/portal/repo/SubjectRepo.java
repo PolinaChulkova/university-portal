@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface SubjectRepo extends JpaRepository<Subject, Long> {
 
     @Transactional
-    @Query(value = "SELECT s FROM Subject s JOIN s.teachers t WHERE t.id = ?1 AND s.subjectName LIKE %?1%")
+    @Query(value = "SELECT s FROM Subject s JOIN s.teachers t WHERE t.id = ?1 AND s.subjectName LIKE %?2%")
     Page<Subject> findTeacherSubject(Long teacherId, String key, Pageable pageable);
 
     @Transactional

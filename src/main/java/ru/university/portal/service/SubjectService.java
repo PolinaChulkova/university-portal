@@ -18,7 +18,7 @@ public class SubjectService {
     private final TeacherService teacherService;
     private final GroupService groupService;
 
-    public Page<Subject> findTeacherSubjects(Long teacherId, String key, Pageable pageable) {
+    public Page<Subject> searchTeacherSubject(Long teacherId, String key, Pageable pageable) {
             return subjectRepo.findTeacherSubject(teacherId, key, pageable);
     }
 
@@ -26,76 +26,43 @@ public class SubjectService {
         return subjectRepo.findAllByTeacherId(teacherId, pageable);
     }
 
-    public Page<Subject> findAllGroupSubject(Long groupId, Pageable pageable) {
+    public Page<Subject> findAllGroupSubjects(Long groupId, Pageable pageable) {
         return subjectRepo.findAllByGroupId(groupId, pageable);
     }
 
     public void createSubject(SubjectDto dto) {
-        try {
             Subject subject = new Subject();
             subject.setSubjectName(dto.getSubjectName());
-            subject.getTeachers().add(teacherService.findTeacherById(dto.getTeacherId()));
+            dto.getTeachersId().forEach(id ->
+                    subject.getTeachers().add(teacherService.findTeacherById(id)));
 
             subjectRepo.save(subject);
-
-        } catch (RuntimeException e) {
-            log.error("Предмет с названием " + dto.getSubjectName() + " не создан. {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
-    public void addGroupToSubject(String groupName, String subjectName) {
-        try {
-            Subject subject = findSubjectByName(subjectName);
-            subject.getGroups().add(groupService.findGroupByGroupName(groupName));
+    public void addGroupToSubject(Long groupId, Long subjectId) {
+            Subject subject = findSubjectById(subjectId);
+            subject.getGroups().add(groupService.findGroupByGroupId(groupId));
 
             subjectRepo.save(subject);
-
-        } catch (RuntimeException e) {
-            log.error("Не удалось добавить группу " +  groupName
-                    + " к предмету " + subjectName + ". {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
-    public void addTeacherToSubject(String email, String subjectName) {
-        try {
-            Subject subject = findSubjectByName(subjectName);
-            subject.getTeachers().add(teacherService.findTeacherByEmail(email));
+    public void addTeacherToSubject(Long teacherId, Long subjectId) {
+            Subject subject = findSubjectById(subjectId);
+            subject.getTeachers().add(teacherService.findTeacherById(teacherId));
 
             subjectRepo.save(subject);
-
-        } catch (RuntimeException e) {
-            log.error("Не удалось добавить преподавателя с email: " +  email
-                    + " к предмету " + subjectName + ". {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
-    public void detachTeacherFromSubject(String email, String subjectName) {
-        try {
-            Subject subject = findSubjectByName(subjectName);
-            subject.getTeachers().remove(teacherService.findTeacherByEmail(email));
+    public void detachTeacherFromSubject(Long teacherId, Long subjectId) {
+            Subject subject = findSubjectById(subjectId);
+            subject.getTeachers().remove(teacherService.findTeacherById(teacherId));
             subjectRepo.save(subject);
-
-        } catch (RuntimeException e) {
-            log.error("Не удалось открепить преподавателя с email: " +  email
-                    + " от предмета " + subjectName + ". {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
-    public void detachGroupFromSubject(String groupName, String subjectName) {
-        try {
-            Subject subject = findSubjectByName(subjectName);
-            subject.getGroups().remove(groupService.findGroupByGroupName(groupName));
+    public void detachGroupFromSubject(Long groupId, Long subjectId) {
+            Subject subject = findSubjectById(subjectId);
+            subject.getGroups().remove(groupService.findGroupByGroupId(groupId));
             subjectRepo.save(subject);
-
-        } catch (RuntimeException e) {
-            log.error("Не удалось открепить группу " +  groupName
-                    + " от предмета " + subjectName + ". {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
     public Subject findSubjectByName(String name) {

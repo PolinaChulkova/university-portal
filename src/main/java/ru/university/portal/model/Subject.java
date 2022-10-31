@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -32,5 +33,5 @@ public class Subject {
     @JoinTable(name = "teachers_subjects",
             joinColumns = @JoinColumn(name = "subject_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id"))
-    private Collection<Teacher> teachers;
+    private Collection<Teacher> teachers = new ArrayList<>();
 }
