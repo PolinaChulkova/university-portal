@@ -2,7 +2,7 @@ INSERT INTO SUBJECT (subject_name)
 VALUES ('Математика'), ('Экономическая теория'), ('Государственное управление'), ('Английский'),
        ('Стратегический ананлиз'), ('ДКБ');
 
-INSERT INTO group_subject (group_id, subject_id)
+INSERT INTO groups_subjects (group_id, subject_id)
 VALUES
        (1, 1), (1, 2), (1, 4), (1, 6),
        (2, 3), (2, 5), (2, 6),

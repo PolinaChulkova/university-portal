@@ -8,7 +8,7 @@ CREATE TABLE SUBJECT (
     subject_name varchar(200) NOT NULL
 );
 
-CREATE TABLE GROUP_SUBJECT (
+CREATE TABLE GROUPS_SUBJECTS (
     group_id bigint,
     subject_id bigint,
     FOREIGN KEY (group_id) REFERENCES GROUPS(group_id),
@@ -74,11 +74,11 @@ CREATE TABLE RATING (
 CREATE TABLE TASK_ANSWER (
     task_answer_id bigserial PRIMARY KEY,
     comment text,
-    date timestamp NOT NULL,
     student_id bigint,
     task_id bigint,
-    FOREIGN KEY (student_id) REFERENCES STUDENT (student_id),
-    FOREIGN KEY (task_id) REFERENCES TASK (task_id)
+    date timestamp NOT NULL,
+    FOREIGN KEY (task_id) REFERENCES TASK(task_id),
+    FOREIGN KEY (student_id) REFERENCES STUDENT(student_id)
 );
 
 CREATE TABLE ANSWERS_FILES (
@@ -86,6 +86,13 @@ CREATE TABLE ANSWERS_FILES (
     file_uri varchar(250) NOT NULL,
     FOREIGN KEY (task_answer_id) REFERENCES TASK_ANSWER(task_answer_id)
 );
+
+CREATE TABLE TEACHERS_SUBJECTS (
+    teacher_id bigint,
+    subject_id bigint,
+    FOREIGN KEY (teacher_id) REFERENCES TEACHER(teacher_id),
+    FOREIGN KEY (subject_id) REFERENCES SUBJECT(subject_id)
+)
 
 
 
