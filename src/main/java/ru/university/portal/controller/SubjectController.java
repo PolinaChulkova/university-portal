@@ -25,7 +25,7 @@ public class SubjectController {
 
     @GetMapping("/student/all/{groupId}/{page}")
     public ResponseEntity<?> getAllGroupSubjects(@PathVariable Long groupId,
-                                                    @PathVariable int page) {
+                                                 @PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 5);
         return ResponseEntity.ok()
                 .body(subjectService.findAllGroupSubjects(groupId, pageable).getContent());
