@@ -22,7 +22,7 @@ public class Rating {
     private String comment;
 
     @JsonManagedReference
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_id")
     private Task task;
 

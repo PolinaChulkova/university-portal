@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.CreateRatingDTO;
+import ru.university.portal.dto.UpdateRatingDTO;
 import ru.university.portal.model.Rating;
 import ru.university.portal.model.Student;
 import ru.university.portal.model.Task;
 import ru.university.portal.repo.RatingRepo;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,30 +30,39 @@ public class RatingService {
             throw new RuntimeException("Невозможно поставить оценку студенту " + student.getFullName()
                     + ", т.к. он закреплен за другим преподавателем");
 
-        try {
-            Rating rating = new Rating(
-                    dto.getMark(),
-                    dto.getComment(),
-                    task,
-                    subjectService.findSubjectByName(dto.getSubjectName()),
-                    student
-            );
-            ratingRepo.save(rating);
-
-        } catch (RuntimeException e) {
-            log.error("Оценка студенту с id= " + dto.getStudentId() + " не поставлена. {}"
-                    + e.getLocalizedMessage());
-        }
+        Rating rating = new Rating(
+                dto.getMark(),
+                dto.getComment(),
+                task,
+                subjectService.findSubjectById(dto.getSubjectId()),
+                student
+        );
+        ratingRepo.save(rating);
     }
 
-    public Rating findRatingByStudentIdAndSubjectId(Long studentId, Long subjectId) {
-        return ratingRepo.findByStudentIdAndSubjectId(studentId, subjectId).orElseThrow(()
-                -> new RuntimeException("Оценка по предмету с id=" + subjectId + " у студента с id ="
-                + studentId + "не найдена."));
+    public void updateRating(Long ratingId, Long teacherId, UpdateRatingDTO dto) {
+        Rating rating = findRatingForTeacher(ratingId, teacherId);
+        rating.setComment(dto.getComment());
+        rating.setMark(dto.getMark());
+
+        ratingRepo.save(rating);
     }
 
-    public Rating findRatingByTaskId(Long taskId) {
-        return ratingRepo.findByTaskId(taskId).orElseThrow(()
-                -> new RuntimeException("Оценка по заданию с id=" + taskId + "не найдена."));
+    public Rating findRatingForStudent(Long taskId, Long studentId) {
+        return ratingRepo.findByTaskIdAndStudentId(taskId, studentId).orElseThrow(()
+                -> new RuntimeException("Оценка по заданию с id=" + taskId + " не найдена."));
+    }
+
+    public List<Rating> findRatingsForTeacher(Long taskId, Long teacherId) {
+        return ratingRepo.findByTaskIdAndTeacherId(taskId, teacherId);
+    }
+
+    public List<Rating> findRatingsForSubject(Long subjectId, Long studentId) {
+        return ratingRepo.findBySubjectIdAndStudentId(subjectId, studentId);
+    }
+
+    public Rating findRatingForTeacher(Long ratingId, Long teacherId) {
+        return ratingRepo.findByIdAndTeacherId(ratingId, teacherId).orElseThrow(()
+                -> new RuntimeException("Оценка с id=" + ratingId + " не найдена."));
     }
 }

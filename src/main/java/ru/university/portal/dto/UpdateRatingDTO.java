@@ -6,10 +6,7 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Getter@Setter
-public class CreateRatingDTO {
+public class UpdateRatingDTO {
     private Short mark;
     private String comment;
-    private Long taskId;
-    private Long subjectId;
-    private Long studentId;
 }
