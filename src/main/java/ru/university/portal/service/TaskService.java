@@ -12,7 +12,9 @@ import ru.university.portal.model.Task;
 import ru.university.portal.repo.GroupRepo;
 import ru.university.portal.repo.TaskRepo;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +27,6 @@ public class TaskService {
     private final TeacherService teacherService;
 
     public void createTask(CreateTaskDTO dto) {
-        try {
             if (groupRepo.findByTeacherIdAndGroupId(dto.getTeacherId(), dto.getGroupId()) == null)
                 throw new RuntimeException("Невозможно создать задание для группы, " +
                         "т.к. она закреплена за другим преподавателем");
@@ -33,22 +34,15 @@ public class TaskService {
             Task task = new Task(dto);
 //            создать оповещение студентов группы
             taskRepo.save(task);
-
-        } catch (RuntimeException e) {
-            log.error("Задание " + dto.getName() + " не создано. {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
-    public void uploadFile(Long taskId, MultipartFile file) {
-        fileService.uploadFiles(file);
+    public void uploadFileToTask(Long taskId, MultipartFile[] files) {
         Task task = findTaskById(taskId);
-        task.getFileUri().add(fileService.uploadFiles(file));
+        task.getFileUri().addAll(Arrays.stream(files).map(fileService::uploadFile).collect(Collectors.toList()));
         taskRepo.save(task);
     }
 
     public void updateTask(Long taskId, UpdateTaskDTO dto) {
-        try {
             Task task = findTaskById(taskId);
 
             if (!task.getTeacher().equals(teacherService.findTeacherById(dto.getTeacherId())))
@@ -60,11 +54,6 @@ public class TaskService {
             task.setDeadLine(dto.getDeadLine());
 
             taskRepo.save(task);
-
-        } catch (RuntimeException e) {
-            log.error("Задание " + dto.getName() + " не обновлёно. {}"
-                    + e.getLocalizedMessage());
-        }
     }
 
     public List<Task> findAllTasksBySubjectForStudent(Long subjectId, Long studentId) {

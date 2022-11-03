@@ -7,7 +7,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -31,7 +30,7 @@ public class FileService {
         }
     }
 
-    public String uploadFiles(MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         if(file.isEmpty()) {
             throw new RuntimeException("Не удалось сохранить пустой файл");
         }

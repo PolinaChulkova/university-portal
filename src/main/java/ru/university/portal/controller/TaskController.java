@@ -1,6 +1,7 @@
 package ru.university.portal.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import ru.university.portal.service.TaskService;
 @RestController
 @RequestMapping("/task")
 @AllArgsConstructor
+@Slf4j
 public class TaskController {
 
     private final TaskService taskService;
@@ -45,22 +47,44 @@ public class TaskController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createTask(@RequestBody CreateTaskDTO dto) {
-        taskService.createTask(dto);
-        return ResponseEntity.ok().body(new MessageResponse("Задание создано"));
+        try {
+            taskService.createTask(dto);
+            return ResponseEntity.ok().body(new MessageResponse("Задание создано"));
+
+        } catch (RuntimeException e) {
+            log.error("Задание " + dto.getName() + " не создано. Error: "
+                    + e.getLocalizedMessage());
+
+            return ResponseEntity.badRequest().body(new MessageResponse("Задание не создано"));
+        }
     }
 
     @PostMapping("/upload/{taskId}")
     public ResponseEntity<?> uploadFile(@PathVariable Long taskId,
-                                        @RequestParam("file") MultipartFile file) {
-        taskService.uploadFile(taskId, file);
-        return ResponseEntity.ok().body(new MessageResponse("Файлы загужены"));
+                                        @RequestParam("files") MultipartFile[] files) {
+        try {
+            taskService.uploadFileToTask(taskId, files);
+
+        } catch (RuntimeException e) {
+            log.error("Файлы к заданию id=" + taskId + " не загужены. Error:" + e.getLocalizedMessage());
+        }
+        return ResponseEntity.ok().body(new MessageResponse("Файлы не загужены"));
     }
 
     @PutMapping("/update/{taskId}")
     public ResponseEntity<?> updateTeacherTask(@PathVariable Long taskId,
                                                @RequestBody UpdateTaskDTO dto) {
-        taskService.updateTask(taskId, dto);
-        return ResponseEntity.ok().body(new MessageResponse("Задание " + dto.getName() + " обновлено."));
+        try {
+            taskService.updateTask(taskId, dto);
+            return ResponseEntity.ok().body(new MessageResponse("Задание " + dto.getName() + " обновлено."));
+
+        } catch (RuntimeException e) {
+            log.error("Задание " + dto.getName() + " не обновлёно. Error: "
+                    + e.getLocalizedMessage());
+            return ResponseEntity.ok().body(new MessageResponse("Задание " + dto.getName()
+                    + " не обновлено."));
+        }
+
     }
 
     //    для админа
