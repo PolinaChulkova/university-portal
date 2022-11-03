@@ -5,10 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.UpdateTaskDTO;
 import ru.university.portal.model.Task;
+import ru.university.portal.repo.GroupRepo;
 import ru.university.portal.repo.TaskRepo;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,15 +20,15 @@ import ru.university.portal.repo.TaskRepo;
 public class TaskService {
 
     private final TaskRepo taskRepo;
-    private final StudentService studentService;
+    private final GroupRepo groupRepo;
+    private final FileService fileService;
 
     public void createTask(CreateTaskDTO dto) {
-
-        if (!dto.getTeacher().getGroups().contains(dto.getGroup()))
-            throw new RuntimeException("Невозможно создать задание для группы " + dto.getGroup().getName()
-            + ", т.к. она закреплена за другим преподавателем");
-
         try {
+            if (groupRepo.findByTeacherIdAndGroupId(dto.getTeacherId(), dto.getGroupId()) == null)
+                throw new RuntimeException("Невозможно создать задание для группы, " +
+                        "т.к. она закреплена за другим преподавателем");
+
             Task task = new Task(dto);
 //            создать оповещение студентов группы
             taskRepo.save(task);
@@ -33,6 +37,13 @@ public class TaskService {
             log.error("Задание " + dto.getName() + " не создано. {}"
                     + e.getLocalizedMessage());
         }
+    }
+
+    public void uploadFile(Long taskId, MultipartFile file) {
+        fileService.uploadFiles(file);
+        Task task = findTaskById(taskId);
+        task.getFileUri().add(fileService.uploadFiles(file));
+        taskRepo.save(task);
     }
 
     public void updateTask(Long taskId, UpdateTaskDTO dto) {
@@ -56,9 +67,12 @@ public class TaskService {
         }
     }
 
+    public List<Task> findAllTasksBySubjectForStudent(Long subjectId, Long studentId) {
+        return taskRepo.findBySubjectIdAndStudentId(subjectId, studentId);
+    }
+
     public Task findTaskByIdForStudent(Long taskId, Long studentId) {
-        Long groupId = studentService.findStudentById(studentId).getGroup().getId();
-        return taskRepo.findByIdAndGroup_Id(taskId, groupId).orElseThrow(()
+        return taskRepo.findByIdAndStudentId(taskId, studentId).orElseThrow(()
                 -> new RuntimeException("Задание с id=" + taskId + "не найдено."));
     }
 
