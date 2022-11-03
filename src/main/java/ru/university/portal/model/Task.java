@@ -7,7 +7,7 @@ import ru.university.portal.dto.CreateTaskDTO;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,7 +33,7 @@ public class Task {
     @ElementCollection
     @CollectionTable(name = "tasks_files", joinColumns = @JoinColumn(name = "task_id"))
     @Column(name = "file_uri")
-    private Set<String> fileUri;
+    private Set<String> fileUri = new HashSet<>();
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
@@ -46,15 +46,12 @@ public class Task {
 
     @JsonBackReference
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
-    private List<TaskAnswer> taskAnswers;
+    private Set<TaskAnswer> taskAnswers;
 
     public Task(CreateTaskDTO dto) {
         this.name = dto.getName();
         this.description = dto.getDescription();
         this.startLine = dto.getStartLine();
         this.deadLine = dto.getDeadLine();
-        this.fileUri = dto.getFileUri();
-        this.teacher = dto.getTeacher();
-        this.group = dto.getGroup();
     }
 }

@@ -16,8 +16,7 @@ public class CreateTaskDTO {
     private String description;
     private Date startLine;
     private Date deadLine;
-    private Set<String> fileUri;
     //    после созании Security преподаватель будет получаться из Principal
-    private Teacher teacher;
-    private Group group;
+    private Long teacherId;
+    private Long groupId;
 }
