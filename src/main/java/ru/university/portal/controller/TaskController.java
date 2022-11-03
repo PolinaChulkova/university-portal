@@ -81,10 +81,10 @@ public class TaskController {
         } catch (RuntimeException e) {
             log.error("Задание " + dto.getName() + " не обновлёно. Error: "
                     + e.getLocalizedMessage());
+
             return ResponseEntity.ok().body(new MessageResponse("Задание " + dto.getName()
                     + " не обновлено."));
         }
-
     }
 
     //    для админа

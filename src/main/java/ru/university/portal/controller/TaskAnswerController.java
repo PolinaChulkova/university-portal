@@ -1,7 +1,7 @@
 package ru.university.portal.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateTaskAnswerDTO;
@@ -12,6 +12,7 @@ import ru.university.portal.service.TaskAnswerService;
 @RestController
 @RequestMapping("/task-answer")
 @AllArgsConstructor
+@Slf4j
 public class TaskAnswerController {
 
     private final TaskAnswerService taskAnswerService;
@@ -30,16 +31,30 @@ public class TaskAnswerController {
 
     @PostMapping("/send")
     private ResponseEntity<?> sendTaskAnswer(@RequestBody CreateTaskAnswerDTO dto) {
-        taskAnswerService.sendTaskAnswer(dto);
-        return ResponseEntity.ok().body(new MessageResponse(dto.getStudent().getFullName()) +
-                ", вы отправили ответ на задание");
+        try {
+            taskAnswerService.sendTaskAnswer(dto);
+            return ResponseEntity.ok().body(new MessageResponse(dto.getStudent().getFullName()) +
+                    ", вы отправили ответ на задание");
+
+        } catch (RuntimeException e) {
+            log.error("Ответ на задание не отправлен. Error: " + e.getLocalizedMessage());
+
+            return ResponseEntity.ok().body("Не удалось отправить ответ на задание");
+        }
     }
 
     @PutMapping("/update/{taskAnswerId}")
     public ResponseEntity<?> updateTaskAnswer(@PathVariable Long taskAnswerId,
                                               @RequestBody UpdateTaskAnswerDTO dto) {
-        taskAnswerService.updateTaskAnswer(taskAnswerId, dto);
-        return ResponseEntity.ok().body(new MessageResponse("Вы обновили свой ответ на задние"));
+        try {
+            taskAnswerService.updateTaskAnswer(taskAnswerId, dto);
+            return ResponseEntity.ok().body(new MessageResponse("Вы обновили свой ответ на задние"));
+
+        } catch (RuntimeException e) {
+            log.error("Ваш ответ не обновлён. Error: " + e.getLocalizedMessage());
+
+            return ResponseEntity.ok().body(new MessageResponse("Не удалось обновить ответ на задние"));
+        }
     }
 
     @GetMapping("/{taskAnswerId}")

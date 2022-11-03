@@ -29,37 +29,28 @@ public class TaskAnswerService {
     }
 
     public void sendTaskAnswer(CreateTaskAnswerDTO dto) {
-        try {
 //            возможна ошибка
-            if (getTaskAnswerForStudent(dto.getTaskId(), dto.getStudent().getId()) == null) {
+        if (getTaskAnswerForStudent(dto.getTaskId(), dto.getStudent().getId()) == null) {
 
-                Task task = taskService.findTaskById(dto.getTaskId());
-                TaskAnswer answer = new TaskAnswer();
-                answer.setComment(dto.getComment());
-                answer.setFileUri(dto.getFileUri());
-                answer.setStudent(dto.getStudent());
-                answer.setTask(task);
+            Task task = taskService.findTaskById(dto.getTaskId());
+            TaskAnswer answer = new TaskAnswer();
+            answer.setComment(dto.getComment());
+            answer.setFileUri(dto.getFileUri());
+            answer.setStudent(dto.getStudent());
+            answer.setTask(task);
 
-                task.getTaskAnswers().add(answer);
+            task.getTaskAnswers().add(answer);
 
-                taskService.saveTask(task);
-                taskAnswerRepo.save(answer);
-
-            }
-        } catch (RuntimeException e) {
-            log.error("Ответ на задание не отправлен. {}" + e.getLocalizedMessage());
+            taskService.saveTask(task);
+            taskAnswerRepo.save(answer);
         }
     }
 
     public void updateTaskAnswer(Long taskAnswerId, UpdateTaskAnswerDTO dto) {
-        try {
             TaskAnswer answer = findTaskAnswerById(taskAnswerId);
             answer.setComment(dto.getComment());
             answer.setFileUri(dto.getFileUri());
             taskAnswerRepo.save(answer);
-        } catch (Exception e) {
-            log.error("Ваш ответ не обновлён. {}" + e.getLocalizedMessage());
-        }
     }
 
     public TaskAnswer findTaskAnswerById(Long taskAnswerId) {
