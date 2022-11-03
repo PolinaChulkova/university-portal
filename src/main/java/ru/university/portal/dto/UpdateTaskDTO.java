@@ -15,7 +15,6 @@ public class UpdateTaskDTO {
     private String description;
     private Date deadLine;
 //    потом буду получать из principal
-    private Teacher teacher;
-    private Set<String> fileUri;
+    private Long teacherId;
 }
 

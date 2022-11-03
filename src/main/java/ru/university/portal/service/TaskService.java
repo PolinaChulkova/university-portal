@@ -22,6 +22,7 @@ public class TaskService {
     private final TaskRepo taskRepo;
     private final GroupRepo groupRepo;
     private final FileService fileService;
+    private final TeacherService teacherService;
 
     public void createTask(CreateTaskDTO dto) {
         try {
@@ -50,14 +51,13 @@ public class TaskService {
         try {
             Task task = findTaskById(taskId);
 
-            if (!task.getTeacher().equals(dto.getTeacher()))
+            if (!task.getTeacher().equals(teacherService.findTeacherById(dto.getTeacherId())))
                 throw new RuntimeException("Невозможно обновить задание" + dto.getName()
                         + ", т.к. оно создано другим преподавателем");
 
             task.setName(dto.getName());
             task.setDescription(dto.getDescription());
             task.setDeadLine(dto.getDeadLine());
-            task.setFileUri(dto.getFileUri());
 
             taskRepo.save(task);
 
