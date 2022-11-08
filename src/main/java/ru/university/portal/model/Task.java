@@ -32,7 +32,7 @@ public class Task {
     @ElementCollection
     @CollectionTable(name = "tasks_files", joinColumns = @JoinColumn(name = "task_id"))
     @Column(name = "file_uri")
-    private Set<String> fileUri = new HashSet<>();
+    private Set<String> filesUri = new HashSet<>();
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)

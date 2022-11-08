@@ -60,15 +60,33 @@ public class TaskController {
     }
 
     @PostMapping("/upload/{taskId}")
-    public ResponseEntity<?> uploadFile(@PathVariable Long taskId,
-                                        @RequestParam("files") MultipartFile[] files) {
+    public ResponseEntity<?> uploadFilesToTask(@PathVariable Long taskId,
+                                               @RequestParam("files") MultipartFile[] files) {
         try {
-            taskService.uploadFileToTask(taskId, files);
+            taskService.uploadFilesToTask(taskId, files);
+            return ResponseEntity.ok().body(new MessageResponse("Файлы загружены"));
 
         } catch (RuntimeException e) {
-            log.error("Файлы к заданию id=" + taskId + " не загужены. Error:" + e.getLocalizedMessage());
+            log.error("Не удалось загрузить файлы к заданию с id=" + taskId
+                    + " Error:" + e.getLocalizedMessage());
+
+            return ResponseEntity.badRequest().body(new MessageResponse("Не удалось загрузить файлы"));
         }
-        return ResponseEntity.ok().body(new MessageResponse("Файлы не загужены"));
+    }
+
+    @DeleteMapping("/delete-file/{taskId}")
+    public ResponseEntity<?> deleteFileFromTask(@PathVariable Long taskId,
+                                                @RequestParam("file-uri") String fileUri) {
+        try {
+            taskService.deleteFileFromTask(taskId, fileUri);
+            return ResponseEntity.ok().body(new MessageResponse("Файл удалён из задания"));
+
+        } catch (RuntimeException e) {
+            log.error("Не удалось удалить файл с uri: " + fileUri + " Error: " + e.getLocalizedMessage());
+
+            return ResponseEntity.internalServerError()
+                    .body(new MessageResponse("Не удалось удалить файл из задания"));
+        }
     }
 
     @PutMapping("/update/{taskId}")

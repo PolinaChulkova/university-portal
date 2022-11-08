@@ -36,9 +36,16 @@ public class TaskService {
             taskRepo.save(task);
     }
 
-    public void uploadFileToTask(Long taskId, MultipartFile[] files) {
+    public void uploadFilesToTask(Long taskId, MultipartFile[] files) {
         Task task = findTaskById(taskId);
-        task.getFileUri().addAll(Arrays.stream(files).map(fileService::uploadFile).collect(Collectors.toList()));
+        task.getFilesUri().addAll(Arrays.stream(files)
+                .map(fileService::uploadFile).collect(Collectors.toList()));
+        taskRepo.save(task);
+    }
+
+    public void deleteFileFromTask(Long taskId, String fileUri) throws RuntimeException{
+        Task task = findTaskById(taskId);
+        task.getFilesUri().remove(fileUri);
         taskRepo.save(task);
     }
 
@@ -62,12 +69,12 @@ public class TaskService {
 
     public Task findTaskByIdForStudent(Long taskId, Long studentId) {
         return taskRepo.findByIdAndStudentId(taskId, studentId).orElseThrow(()
-                -> new RuntimeException("Задание с id=" + taskId + "не найдено."));
+                -> new RuntimeException("Задание с id=" + taskId + " недоступно."));
     }
 
     public Task findTaskByIdForTeacher(Long taskId, Long teacherId) {
         return taskRepo.findByIdAndTeacher_Id(taskId, teacherId).orElseThrow(()
-                -> new RuntimeException("Задание с id=" + taskId + "не найдено."));
+                -> new RuntimeException("Задание с id=" + taskId + " недоступно."));
     }
 
     public Page<Task> findAllTeacherTasks(Long teacherId, Pageable pageable) {
@@ -76,7 +83,7 @@ public class TaskService {
 
     public Task findTaskById(Long taskId) {
         return taskRepo.findById(taskId).orElseThrow(()
-                -> new RuntimeException("Задание с id=" + taskId + "не найдено."));
+                -> new RuntimeException("Задание с id=" + taskId + " не найдено."));
     }
 
     public void deleteTaskById(Long taskId) {
