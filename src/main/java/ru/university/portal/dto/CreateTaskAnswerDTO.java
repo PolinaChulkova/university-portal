@@ -11,8 +11,7 @@ import java.util.Set;
 @Getter@Setter
 public class CreateTaskAnswerDTO {
     private String comment;
-    private Set<String> fileUri;
     //    после созании Security студент будет получаться из Principal
-    private Student student;
+    private Long studentId;
     private Long taskId;
 }

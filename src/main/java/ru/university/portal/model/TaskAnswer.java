@@ -9,9 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "task_answer")
-@Getter
-@Setter
-@EqualsAndHashCode
+@Getter@Setter
 @NoArgsConstructor
 public class TaskAnswer {
     @Id
@@ -26,7 +24,7 @@ public class TaskAnswer {
     @ElementCollection
     @CollectionTable(name = "answers_files", joinColumns = @JoinColumn(name = "task_answer_id"))
     @Column(name = "file_uri")
-    private Set<String> fileUri;
+    private Set<String> filesUri;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id")
@@ -37,10 +35,35 @@ public class TaskAnswer {
     @JoinColumn(name = "task_id")
     private Task task;
 
-    public TaskAnswer(String comment, Set<String> fileUri, Student student, Task task) {
+    public TaskAnswer(String comment, Student student, Task task) {
         this.comment = comment;
-        this.fileUri = fileUri;
         this.student = student;
         this.task = task;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TaskAnswer that = (TaskAnswer) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (filesUri != null ? !filesUri.equals(that.filesUri) : that.filesUri != null) return false;
+        if (student != null ? !student.equals(that.student) : that.student != null) return false;
+        return task != null ? task.equals(that.task) : that.task == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (filesUri != null ? filesUri.hashCode() : 0);
+        result = 31 * result + (student != null ? student.hashCode() : 0);
+        result = 31 * result + (task != null ? task.hashCode() : 0);
+        return result;
     }
 }
