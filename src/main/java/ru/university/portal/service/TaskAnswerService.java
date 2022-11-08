@@ -3,13 +3,15 @@ package ru.university.portal.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.university.portal.dto.CreateTaskAnswerDTO;
-import ru.university.portal.dto.UpdateTaskAnswerDTO;
 import ru.university.portal.model.Task;
 import ru.university.portal.model.TaskAnswer;
 import ru.university.portal.repo.TaskAnswerRepo;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +20,8 @@ public class TaskAnswerService {
 
     private final TaskService taskService;
     private final TaskAnswerRepo taskAnswerRepo;
+    private final StudentService studentService;
+    private final FileService fileService;
 
     public TaskAnswer getTaskAnswerForStudent(Long taskId, Long studentId) {
         return taskAnswerRepo.findByTaskIdAndStudentId(taskId, studentId).orElseThrow(() ->
@@ -29,32 +33,47 @@ public class TaskAnswerService {
     }
 
     public void sendTaskAnswer(CreateTaskAnswerDTO dto) {
-//            возможна ошибка
-        if (getTaskAnswerForStudent(dto.getTaskId(), dto.getStudent().getId()) == null) {
-
-            Task task = taskService.findTaskById(dto.getTaskId());
-            TaskAnswer answer = new TaskAnswer();
-            answer.setComment(dto.getComment());
-            answer.setFileUri(dto.getFileUri());
-            answer.setStudent(dto.getStudent());
-            answer.setTask(task);
-
-            task.getTaskAnswers().add(answer);
-
-            taskService.saveTask(task);
-            taskAnswerRepo.save(answer);
+        if (taskService.findTaskByIdForStudent(dto.getTaskId(), dto.getStudentId()) == null) {
+            throw new RuntimeException("Нельзя отправить ответ на это задание");
         }
+
+        Task task = taskService.findTaskById(dto.getTaskId());
+        TaskAnswer answer = new TaskAnswer(
+                dto.getComment(),
+                studentService.findStudentById(dto.getStudentId()),
+                task
+        );
+        task.getTaskAnswers().add(answer);
+
+        taskService.saveTask(task);
     }
 
-    public void updateTaskAnswer(Long taskAnswerId, UpdateTaskAnswerDTO dto) {
-            TaskAnswer answer = findTaskAnswerById(taskAnswerId);
-            answer.setComment(dto.getComment());
-            answer.setFileUri(dto.getFileUri());
-            taskAnswerRepo.save(answer);
+    public void uploadFilesToAnswer(Long taskAnswerId, MultipartFile[] files) {
+        TaskAnswer taskAnswer = findTaskAnswerById(taskAnswerId);
+        taskAnswer.getFilesUri().addAll(Arrays.stream(files)
+                .map(fileService::uploadFile).collect(Collectors.toSet()));
+        taskAnswerRepo.save(taskAnswer);
+    }
+
+    public void updateTaskAnswer(Long taskAnswerId, String comment) {
+        TaskAnswer answer = findTaskAnswerById(taskAnswerId);
+        answer.setComment(comment);
+        taskAnswerRepo.save(answer);
     }
 
     public TaskAnswer findTaskAnswerById(Long taskAnswerId) {
         return taskAnswerRepo.findById(taskAnswerId).orElseThrow(() ->
                 new RuntimeException("Ваш ответ не существует"));
+    }
+
+    public void deleteFileFromAnswer(Long taskAnswerId, String fileUri) throws RuntimeException {
+        TaskAnswer answer = findTaskAnswerById(taskAnswerId);
+        answer.getFilesUri().remove(fileUri);
+        taskAnswerRepo.save(answer);
+    }
+
+    public void deleteTaskAnswer(Long taskAnswerId, Long studentId) {
+        if (taskAnswerRepo.existsByIdAndStudentId(taskAnswerId, studentId));
+            taskAnswerRepo.deleteById(taskAnswerId);
     }
 }

@@ -16,7 +16,11 @@ public interface TaskAnswerRepo extends JpaRepository<TaskAnswer, Long> {
 
     Optional<TaskAnswer> findByTaskIdAndStudentId(Long taskId, Long studentId);
 
+    boolean existsByIdAndStudentId(Long id, Long studentId);
+
     @Transactional
     @Query(value = "SELECT t FROM TaskAnswer t WHERE t.task.id = ?1 AND t.task.teacher.id = ?2")
     List<TaskAnswer> findByTaskIdAndTeacherId(Long taskId, Long teacherId);
+
+    void deleteById(Long id);
 }
