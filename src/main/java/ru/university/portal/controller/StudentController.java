@@ -2,6 +2,7 @@ package ru.university.portal.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.MessageResponse;
@@ -15,6 +16,11 @@ import ru.university.portal.service.StudentService;
 public class StudentController {
 
     private final StudentService studentService;
+
+    @RabbitListener(queues = "studentQueue")
+    public void notificationListener(String message) {
+        log.info("Студент получил сообщение: " + message);
+    }
 
     @GetMapping("/{studentId}")
     public ResponseEntity<?> findStudentById(@PathVariable Long studentId) {

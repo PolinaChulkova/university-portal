@@ -2,6 +2,7 @@ package ru.university.portal.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.MessageResponse;
@@ -15,6 +16,11 @@ import ru.university.portal.service.TeacherService;
 public class TeacherController {
 
     private final TeacherService teacherService;
+
+    @RabbitListener(queues = "teacherQueue")
+    public void notificationListener(String message) {
+        log.info("Преподаватель получил сообщение: " + message);
+    }
 
     @GetMapping("/groups/{teacherId}")
     public ResponseEntity<?> findTeacherGroups(@PathVariable Long teacherId) {
@@ -34,7 +40,7 @@ public class TeacherController {
             return ResponseEntity.ok().body(new MessageResponse("Создан преподаватель с email: " + dto.getEmail()));
 
         } catch (RuntimeException e) {
-            log.error("Преподаватель с email: " + dto.getEmail() + " не создан. {}"
+            log.error("Преподаватель с email: " + dto.getEmail() + " не создан. Error: "
                     + e.getLocalizedMessage());
 
             return ResponseEntity.badRequest().body(new MessageResponse("Преподаватель с email: " + dto.getEmail())

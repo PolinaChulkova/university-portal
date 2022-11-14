@@ -2,11 +2,13 @@ package ru.university.portal.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.university.portal.dto.CreateTaskAnswerDTO;
 import ru.university.portal.dto.MessageResponse;
+import ru.university.portal.model.TaskAnswer;
 import ru.university.portal.service.TaskAnswerService;
 
 @RestController
@@ -16,6 +18,7 @@ import ru.university.portal.service.TaskAnswerService;
 public class TaskAnswerController {
 
     private final TaskAnswerService taskAnswerService;
+    private final AmqpTemplate amqpTemplate;
 
     @GetMapping("/for-student/{studentId}/{taskId}")
     public ResponseEntity<?> getTaskAnswerForStudent(@PathVariable Long studentId,
@@ -32,13 +35,17 @@ public class TaskAnswerController {
     @PostMapping("/send")
     private ResponseEntity<?> sendTaskAnswer(@RequestBody CreateTaskAnswerDTO dto) {
         try {
-            taskAnswerService.sendTaskAnswer(dto);
-            return ResponseEntity.ok().body(new MessageResponse("Вы отправили ответ на задание"));
+            TaskAnswer answer = taskAnswerService.sendTaskAnswer(dto);
+            amqpTemplate.convertAndSend("teacherQueue", answer.getStudent().getFullName()
+                    + "  из группы \"" + answer.getStudent().getGroup()
+                    + " прислал(-а) задание на проверку по предмету");
+            return ResponseEntity.ok().body(answer);
 
         } catch (RuntimeException e) {
             log.error("Не удалось отправить ответ на задание. Error: " + e.getLocalizedMessage());
 
-            return ResponseEntity.internalServerError().body("Не удалось отправить ответ на задание");
+            return ResponseEntity.internalServerError().body("Не удалось отправить ответ на задание. Error: "
+                    + e.getLocalizedMessage());
         }
     }
 
@@ -68,7 +75,8 @@ public class TaskAnswerController {
             log.error("Ваш ответ не обновлён. Error: " + e.getLocalizedMessage());
 
             return ResponseEntity.internalServerError()
-                    .body(new MessageResponse("Не удалось обновить ответ на задние"));
+                    .body(new MessageResponse("Не удалось обновить ответ на задние. Error: "
+                            + e.getLocalizedMessage()));
         }
     }
 
@@ -88,7 +96,8 @@ public class TaskAnswerController {
             log.error("Не удалось удалить файл с uri: " + fileUri + " Error: " + e.getLocalizedMessage());
 
             return ResponseEntity.internalServerError()
-                    .body(new MessageResponse("Не удалось удалить файл из ответа на задание"));
+                    .body(new MessageResponse("Не удалось удалить файл из ответа на задание. Error: "
+                            + e.getLocalizedMessage()));
         }
     }
 
@@ -104,7 +113,8 @@ public class TaskAnswerController {
                     + e.getLocalizedMessage());
 
             return ResponseEntity.internalServerError()
-                    .body(new MessageResponse("Не удалось удалить ответ на задание"));
+                    .body(new MessageResponse("Не удалось удалить ответ на задание. Error: "
+                            + e.getLocalizedMessage()));
         }
     }
 }

@@ -22,7 +22,7 @@ public class RatingService {
     private final SubjectService subjectService;
     private final StudentService studentService;
 
-    public void createRating(CreateRatingDTO dto) {
+    public Rating createRating(CreateRatingDTO dto) {
         Task task = taskService.findTaskById(dto.getTaskId());
         Student student = studentService.findStudentById(dto.getStudentId());
 
@@ -37,7 +37,9 @@ public class RatingService {
                 subjectService.findSubjectById(dto.getSubjectId()),
                 student
         );
+
         ratingRepo.save(rating);
+        return rating;
     }
 
     public void updateRating(Long ratingId, Long teacherId, UpdateRatingDTO dto) {

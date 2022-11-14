@@ -2,6 +2,7 @@ package ru.university.portal.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.university.portal.dto.CreateTaskDTO;
 import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.dto.UpdateTaskDTO;
+import ru.university.portal.model.Task;
 import ru.university.portal.service.TaskService;
 
 @RestController
@@ -19,6 +21,7 @@ import ru.university.portal.service.TaskService;
 public class TaskController {
 
     private final TaskService taskService;
+    private final AmqpTemplate template;
 
     @GetMapping("/student/{studentId}/{taskId}")
     public ResponseEntity<?> getStudentTask(@PathVariable Long studentId,
@@ -48,14 +51,17 @@ public class TaskController {
     @PostMapping("/create")
     public ResponseEntity<?> createTask(@RequestBody CreateTaskDTO dto) {
         try {
-            taskService.createTask(dto);
-            return ResponseEntity.ok().body(new MessageResponse("Задание создано"));
+            Task task = taskService.createTask(dto);
+            template.convertAndSend("studentQueue", "Создано новое задание по предмету \""
+                    + task.getName() + "\"");
+            return ResponseEntity.ok().body(task);
 
         } catch (RuntimeException e) {
             log.error("Задание " + dto.getName() + " не создано. Error: "
                     + e.getLocalizedMessage());
 
-            return ResponseEntity.badRequest().body(new MessageResponse("Задание не создано"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Задание не создано. Error: "
+                    + e.getLocalizedMessage()));
         }
     }
 
@@ -70,7 +76,8 @@ public class TaskController {
             log.error("Не удалось загрузить файлы к заданию с id=" + taskId
                     + " Error:" + e.getLocalizedMessage());
 
-            return ResponseEntity.badRequest().body(new MessageResponse("Не удалось загрузить файлы"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Не удалось загрузить файлы." +
+                    "Error: " + e.getLocalizedMessage()));
         }
     }
 
@@ -85,7 +92,8 @@ public class TaskController {
             log.error("Не удалось удалить файл с uri: " + fileUri + " Error: " + e.getLocalizedMessage());
 
             return ResponseEntity.internalServerError()
-                    .body(new MessageResponse("Не удалось удалить файл из задания"));
+                    .body(new MessageResponse("Не удалось удалить файл из задания. Error: "
+                            + e.getLocalizedMessage()));
         }
     }
 
@@ -101,7 +109,7 @@ public class TaskController {
                     + e.getLocalizedMessage());
 
             return ResponseEntity.ok().body(new MessageResponse("Задание " + dto.getName()
-                    + " не обновлено."));
+                    + " не обновлено. Error: " + e.getLocalizedMessage()));
         }
     }
 

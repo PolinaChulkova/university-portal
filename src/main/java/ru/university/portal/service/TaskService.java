@@ -26,14 +26,14 @@ public class TaskService {
     private final FileService fileService;
     private final TeacherService teacherService;
 
-    public void createTask(CreateTaskDTO dto) {
+    public Task createTask(CreateTaskDTO dto) {
             if (groupRepo.findByTeacherIdAndGroupId(dto.getTeacherId(), dto.getGroupId()) == null)
                 throw new RuntimeException("Невозможно создать задание для группы, " +
                         "т.к. она закреплена за другим преподавателем");
 
             Task task = new Task(dto);
-//            создать оповещение студентов группы
             taskRepo.save(task);
+            return task;
     }
 
     public void uploadFilesToTask(Long taskId, MultipartFile[] files) {

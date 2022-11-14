@@ -32,7 +32,7 @@ public class TaskAnswerService {
         return taskAnswerRepo.findByTaskIdAndTeacherId(taskId, teacherId);
     }
 
-    public void sendTaskAnswer(CreateTaskAnswerDTO dto) {
+    public TaskAnswer sendTaskAnswer(CreateTaskAnswerDTO dto) {
         if (taskService.findTaskByIdForStudent(dto.getTaskId(), dto.getStudentId()) == null) {
             throw new RuntimeException("Нельзя отправить ответ на это задание");
         }
@@ -46,6 +46,7 @@ public class TaskAnswerService {
         task.getTaskAnswers().add(answer);
 
         taskService.saveTask(task);
+        return answer;
     }
 
     public void uploadFilesToAnswer(Long taskAnswerId, MultipartFile[] files) {

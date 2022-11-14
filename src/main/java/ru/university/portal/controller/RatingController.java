@@ -2,11 +2,13 @@ package ru.university.portal.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateRatingDTO;
 import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.dto.UpdateRatingDTO;
+import ru.university.portal.model.Rating;
 import ru.university.portal.service.RatingService;
 
 @RestController
@@ -16,12 +18,15 @@ import ru.university.portal.service.RatingService;
 public class RatingController {
 
     private final RatingService ratingService;
+    private final AmqpTemplate amqpTemplate;
 
     @PostMapping("/create")
     public ResponseEntity<?> createRating(@RequestBody CreateRatingDTO dto) {
         try {
-            ratingService.createRating(dto);
-            return ResponseEntity.ok().body(new MessageResponse("Выставлена оценка"));
+            Rating rating = ratingService.createRating(dto);
+            amqpTemplate.convertAndSend("studentQueue", "Выставлена оценка по предмету \""
+                    + rating.getSubject().getSubjectName() + "\"");
+            return ResponseEntity.ok().body(rating);
 
         } catch (RuntimeException e) {
             log.error("Оценка студенту с id= " + dto.getStudentId() + " не выставлена. Error: "
@@ -51,7 +56,7 @@ public class RatingController {
 
     @GetMapping("/student/{taskId}/{studentId}")
     public ResponseEntity<?> findRatingForStudent(@PathVariable Long taskId,
-                                                   @PathVariable Long studentId) {
+                                                  @PathVariable Long studentId) {
         return ResponseEntity.ok().body(ratingService.findRatingForStudent(taskId, studentId));
     }
 
@@ -63,7 +68,7 @@ public class RatingController {
 
     @GetMapping("/subject/{subjectId}/{studentId}")
     public ResponseEntity<?> findRatingsForSubject(@PathVariable Long subjectId,
-                                                  @PathVariable Long studentId) {
+                                                   @PathVariable Long studentId) {
         return ResponseEntity.ok().body(ratingService.findRatingsForSubject(subjectId, studentId));
     }
 }
