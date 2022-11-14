@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -48,12 +49,12 @@ public class TaskAnswer {
 
         TaskAnswer that = (TaskAnswer) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        if (filesUri != null ? !filesUri.equals(that.filesUri) : that.filesUri != null) return false;
-        if (student != null ? !student.equals(that.student) : that.student != null) return false;
-        return task != null ? task.equals(that.task) : that.task == null;
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(comment, that.comment)) return false;
+        if (!Objects.equals(date, that.date)) return false;
+        if (!Objects.equals(filesUri, that.filesUri)) return false;
+        if (!Objects.equals(student, that.student)) return false;
+        return Objects.equals(task, that.task);
     }
 
     @Override

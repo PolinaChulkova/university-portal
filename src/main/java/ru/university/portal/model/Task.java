@@ -8,6 +8,7 @@ import ru.university.portal.dto.CreateTaskDTO;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -61,13 +62,13 @@ public class Task {
 
         Task task = (Task) o;
 
-        if (id != null ? !id.equals(task.id) : task.id != null) return false;
-        if (name != null ? !name.equals(task.name) : task.name != null) return false;
-        if (description != null ? !description.equals(task.description) : task.description != null) return false;
-        if (startLine != null ? !startLine.equals(task.startLine) : task.startLine != null) return false;
-        if (deadLine != null ? !deadLine.equals(task.deadLine) : task.deadLine != null) return false;
-        if (teacher != null ? !teacher.equals(task.teacher) : task.teacher != null) return false;
-        return group != null ? group.equals(task.group) : task.group == null;
+        if (!Objects.equals(id, task.id)) return false;
+        if (!Objects.equals(name, task.name)) return false;
+        if (!Objects.equals(description, task.description)) return false;
+        if (!Objects.equals(startLine, task.startLine)) return false;
+        if (!Objects.equals(deadLine, task.deadLine)) return false;
+        if (!Objects.equals(teacher, task.teacher)) return false;
+        return Objects.equals(group, task.group);
     }
 
     @Override
