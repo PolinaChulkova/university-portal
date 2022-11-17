@@ -9,9 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @Getter
-public class TeacherDTO {
-    @NotNull
-    private final Long id;
+public class TeacherDTO{
     @NotNull
     private final String fullName;
     @NotNull
@@ -21,5 +19,8 @@ public class TeacherDTO {
     private final String password;
     @NotNull
     private final String phoneNum;
+    @NotNull
+    private final String role;
+
     private final String academicDegree;
 }

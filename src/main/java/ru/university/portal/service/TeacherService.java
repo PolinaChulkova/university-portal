@@ -22,7 +22,6 @@ public class TeacherService implements UserDetailsService {
 
     private final TeacherRepo teacherRepo;
     private final PasswordEncoder passwordEncoder;
-//    private final AuthenticationManager authenticationManager;
 
     public Teacher findTeacherById(Long teacherId) {
         return teacherRepo.findById(teacherId)
@@ -40,14 +39,6 @@ public class TeacherService implements UserDetailsService {
             teacherRepo.save(teacher);
             return teacher;
     }
-
-//    public Teacher loginTeacher(LoginDTO dto) {
-//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                dto.getEmail(),
-//                dto.getPassword()));
-//        return (Teacher) new CachingUserDetailsService(this)
-//                .loadUserByUsername(dto.getEmail());
-//    }
 
     public void updateTeacher(Long teacherId, TeacherDTO dto) {
         try {

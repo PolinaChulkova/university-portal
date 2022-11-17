@@ -61,6 +61,7 @@ public class Teacher implements UserDetails {
         this.fullName = dto.getFullName();
         this.email = dto.getEmail();
         this.phoneNum = dto.getPhoneNum();
+        this.role = Role.valueOf(dto.getRole());
         this.academicDegree = dto.getAcademicDegree();
     }
 

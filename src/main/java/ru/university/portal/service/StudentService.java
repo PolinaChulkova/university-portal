@@ -20,12 +20,12 @@ public class StudentService implements UserDetailsService {
 
     private final StudentRepo studentRepo;
     private final PasswordEncoder passwordEncoder;
-//    private final AuthenticationManager authenticationManager;
 
-    public void registerStudent(StudentDTO dto) {
+    public Student registerStudent(StudentDTO dto) {
             Student student = new Student(dto);
             student.setPassword(passwordEncoder.encode(dto.getPassword()));
             studentRepo.save(student);
+            return student;
     }
 
 //    public Student loginStudent(LoginDTO dto) {

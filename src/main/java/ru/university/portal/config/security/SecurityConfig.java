@@ -24,9 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .csrf().disable()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
-                .antMatchers("\"/api/auth/login\", " +
-                        "\"/api/auth/registration\", " +
-                        "\"/api/auth/current\"").permitAll()
+                .antMatchers("/logout/**" +
+                        "/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and();
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

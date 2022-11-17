@@ -50,6 +50,7 @@ public class Student implements UserDetails {
     public Student(StudentDTO dto) {
         this.fullName = dto.getFullName();
         this.email = dto.getEmail();
+        this.role = Role.valueOf(dto.getRole());
         this.phoneNum = dto.getPhoneNum();
     }
 

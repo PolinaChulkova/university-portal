@@ -18,5 +18,7 @@ public class StudentDTO {
     @NotNull
     private final String password;
     @NotNull
+    private final String role;
+
     private final String phoneNum;
 }
