@@ -36,7 +36,7 @@ public class TeacherController {
     @PostMapping("/create")
     public ResponseEntity<?> createTeacher(@RequestBody TeacherDTO dto) {
         try {
-            teacherService.createTeacher(dto);
+            teacherService.registerTeacher(dto);
             return ResponseEntity.ok().body(new MessageResponse("Создан преподаватель с email: " + dto.getEmail()));
 
         } catch (RuntimeException e) {

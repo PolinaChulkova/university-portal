@@ -3,11 +3,15 @@ package ru.university.portal.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.university.portal.dto.TeacherDTO;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "teacher")
@@ -15,7 +19,7 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class Teacher {
+public class Teacher implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "teacher_id")
@@ -30,6 +34,10 @@ public class Teacher {
     private String phoneNum;
     @Column(name = "academic_degree")
     private String academicDegree;
+
+    @Enumerated
+    @Column(name = "role")
+    private Role role;
 
     @JsonBackReference
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
@@ -52,8 +60,37 @@ public class Teacher {
     public Teacher(TeacherDTO dto) {
         this.fullName = dto.getFullName();
         this.email = dto.getEmail();
-        this.password = dto.getPassword();
         this.phoneNum = dto.getPhoneNum();
         this.academicDegree = dto.getAcademicDegree();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Set.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
