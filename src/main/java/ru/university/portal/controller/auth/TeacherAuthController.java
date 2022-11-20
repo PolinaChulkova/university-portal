@@ -31,9 +31,9 @@ public class TeacherAuthController {
     public ResponseEntity<?> registrationTeacher(@RequestBody TeacherDTO dto,
                                                  HttpServletResponse response) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    dto.getEmail(),
-                    dto.getPassword()));
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                    dto.getEmail(),
+//                    dto.getPassword()));
             Teacher teacher = teacherService.registerTeacher(dto);
             authService.setAllTokens(teacher, dto.getRole(), response);
             return ResponseEntity.ok().body(teacher);

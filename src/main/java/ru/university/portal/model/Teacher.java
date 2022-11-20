@@ -35,7 +35,7 @@ public class Teacher implements UserDetails {
     @Column(name = "academic_degree")
     private String academicDegree;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
 

@@ -28,23 +28,23 @@ public class JwtTokenProvider {
     private String secretKey;
 
     @Getter
-    @Value("${auth.cookie.auth}")
+    @Value("${auth.auth}")
     private String authCookieName;
 
     @Getter
-    @Value("${auth.cookie.refresh}")
+    @Value("${auth.refresh}")
     private String refreshCookieName;
 
     @Getter
-    @Value("${auth.cookie.expiration-auth}")
+    @Value("${auth.expiration-auth}")
     private Integer authExpirationCookie;
 
     @Getter
-    @Value("${auth.cookie.expiration-refresh}")
+    @Value("${auth.expiration-refresh}")
     private Integer refreshExpirationCookie;
 
     @Getter
-    @Value("${auth.cookie.path}")
+    @Value("${auth.path}")
     private String cookiePath;
 
     private final TeacherService teacherService;
