@@ -27,7 +27,7 @@ public class StudentAuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registrationTeacher(@RequestBody StudentDTO dto,
+    public ResponseEntity<?> registrationStudent(@RequestBody StudentDTO dto,
                                                  HttpServletResponse response) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -58,7 +58,7 @@ public class StudentAuthController {
 //    }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> loginTeacher(@RequestBody LoginDTO dto,
+    public ResponseEntity<?> loginStudent(@RequestBody LoginDTO dto,
                                           HttpServletResponse response) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

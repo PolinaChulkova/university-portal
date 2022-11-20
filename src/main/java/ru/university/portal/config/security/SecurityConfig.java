@@ -21,11 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
-//                .csrf().disable()
+                .csrf().disable()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
                 .antMatchers("/logout/**" +
-                        "/auth/**").permitAll()
+                        "/auth/teacher/**").permitAll()
                 .anyRequest().authenticated()
                 .and();
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
