@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.university.portal.dto.LoginDTO;
 import ru.university.portal.dto.TeacherDTO;
 import ru.university.portal.model.Teacher;
 import ru.university.portal.repo.TeacherRepo;
@@ -17,7 +18,6 @@ import ru.university.portal.repo.TeacherRepo;
 public class TeacherService implements UserDetailsService {
 
     private final TeacherRepo teacherRepo;
-//    private final PasswordEncoder passwordEncoder;
 
     public Teacher findTeacherById(Long teacherId) {
         return teacherRepo.findById(teacherId)
@@ -35,6 +35,7 @@ public class TeacherService implements UserDetailsService {
             teacherRepo.save(teacher);
             return teacher;
     }
+
 
     public void updateTeacher(Long teacherId, TeacherDTO dto) {
         try {

@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-    private final AuthEntryPoint authEntryPoint;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -33,8 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                .logout().deleteCookies(CookieAuthFilter.COOKIE_NAME)
                 .authorizeRequests()
-                .antMatchers("/teacher/register").permitAll()
-                .anyRequest().authenticated().and().formLogin();
+                .antMatchers("/teacher/register", "/teacher/login",
+                        "/logout").permitAll()
+                .anyRequest().authenticated();
     }
 
     @Bean
