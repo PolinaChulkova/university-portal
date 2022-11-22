@@ -6,12 +6,7 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Getter@Setter
-public class TeacherDTO {
-    private Long id;
-    private String fullName;
+public class LoginDTO {
     private String email;
     private String password;
-    private String phoneNum;
-    private String academicDegree;
-    private String role;
 }

@@ -2,6 +2,10 @@ package ru.university.portal.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.university.portal.dto.TeacherDTO;
 import ru.university.portal.model.Teacher;
@@ -10,9 +14,10 @@ import ru.university.portal.repo.TeacherRepo;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class TeacherService {
+public class TeacherService implements UserDetailsService {
 
     private final TeacherRepo teacherRepo;
+//    private final PasswordEncoder passwordEncoder;
 
     public Teacher findTeacherById(Long teacherId) {
         return teacherRepo.findById(teacherId)
@@ -24,9 +29,11 @@ public class TeacherService {
                 .orElseThrow(() -> new RuntimeException("Преподаватель с email: " + email + "не найден."));
     }
 
-    public void createTeacher(TeacherDTO dto) {
+    public Teacher createTeacher(TeacherDTO dto) {
             Teacher teacher = new Teacher(dto);
+//            teacher.setPassword(passwordEncoder.encode(dto.getPassword()));
             teacherRepo.save(teacher);
+            return teacher;
     }
 
     public void updateTeacher(Long teacherId, TeacherDTO dto) {
@@ -49,5 +56,10 @@ public class TeacherService {
     public void deleteTeacherById(Long teacherId) {
         if (teacherRepo.existsById(teacherId)) teacherRepo.deleteById(teacherId);
         else throw new RuntimeException("Преподавателя с Id=" + teacherId + " не существует!");
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return findTeacherByEmail(username);
     }
 }

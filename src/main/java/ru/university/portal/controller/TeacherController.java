@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.university.portal.dto.LoginDTO;
 import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.dto.TeacherDTO;
 import ru.university.portal.service.TeacherService;
@@ -22,22 +23,11 @@ public class TeacherController {
         log.info("Преподаватель получил сообщение: " + message);
     }
 
-    @GetMapping("/groups/{teacherId}")
-    public ResponseEntity<?> findTeacherGroups(@PathVariable Long teacherId) {
-        return ResponseEntity.ok().body(teacherService.findTeacherById(teacherId).getGroups());
-    }
-
-    @GetMapping("/{teacherId}")
-    public ResponseEntity<?> findTeacherById(@PathVariable Long teacherId) {
-        return ResponseEntity.ok().body(teacherService.findTeacherById(teacherId));
-    }
-
     //    для админа
-    @PostMapping("/create")
+    @PostMapping("/register")
     public ResponseEntity<?> createTeacher(@RequestBody TeacherDTO dto) {
         try {
-            teacherService.createTeacher(dto);
-            return ResponseEntity.ok().body(new MessageResponse("Создан преподаватель с email: " + dto.getEmail()));
+            return ResponseEntity.ok().body(teacherService.createTeacher(dto));
 
         } catch (RuntimeException e) {
             log.error("Преподаватель с email: " + dto.getEmail() + " не создан. Error: "
@@ -46,6 +36,31 @@ public class TeacherController {
             return ResponseEntity.badRequest().body(new MessageResponse("Преподаватель с email: " + dto.getEmail())
                     + " не создан. Error: " + e.getLocalizedMessage());
         }
+    }
+
+//    //    для админа
+//    @PostMapping("/login")
+//    public ResponseEntity<?> loginTeacher(@RequestBody LoginDTO dto) {
+//        try {
+//            return ResponseEntity.ok().body(teacherService.createTeacher(dto));
+//
+//        } catch (RuntimeException e) {
+//            log.error("Преподаватель с email: " + dto.getEmail() + " не создан. Error: "
+//                    + e.getLocalizedMessage());
+//
+//            return ResponseEntity.badRequest().body(new MessageResponse("Преподаватель с email: " + dto.getEmail())
+//                    + " не создан. Error: " + e.getLocalizedMessage());
+//        }
+//    }
+
+    @GetMapping("/groups/{teacherId}")
+    public ResponseEntity<?> findTeacherGroups(@PathVariable Long teacherId) {
+        return ResponseEntity.ok().body(teacherService.findTeacherById(teacherId).getGroups());
+    }
+
+    @GetMapping("/{teacherId}")
+    public ResponseEntity<?> findTeacherById(@PathVariable Long teacherId) {
+        return ResponseEntity.ok().body(teacherService.findTeacherById(teacherId));
     }
 
     //    для админа
