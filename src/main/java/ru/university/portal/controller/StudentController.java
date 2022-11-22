@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.dto.StudentDTO;
@@ -17,6 +18,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
+    @PreAuthorize("hasRole ('STUDENT') ")
     @RabbitListener(queues = "studentQueue")
     public void notificationListener(String message) {
         log.info("Студент получил сообщение: " + message);
@@ -30,7 +32,7 @@ public class StudentController {
     @PostMapping("/create")
     public ResponseEntity<?> createStudent(@RequestBody StudentDTO dto) {
         try {
-            studentService.createStudent(dto);
+            studentService.registerStudent(dto);
             return ResponseEntity.ok().body(new MessageResponse("Создан студент с email: " + dto.getEmail()));
 
         } catch (RuntimeException e) {

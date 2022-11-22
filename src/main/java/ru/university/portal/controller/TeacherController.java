@@ -54,7 +54,6 @@ public class TeacherController {
             Cookie cookie = new Cookie("SESSION", session.getId());
             response.addCookie(cookie);
             return ResponseEntity.ok().body(teacherService.findTeacherByEmail(dto.getEmail()));
-
         } catch (RuntimeException e) {
             log.error("Преподаватель с email: " + dto.getEmail() + " не создан. Error: "
                     + e.getLocalizedMessage());

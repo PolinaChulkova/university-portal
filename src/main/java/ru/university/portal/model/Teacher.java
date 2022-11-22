@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "teacher")
@@ -61,6 +62,7 @@ public class Teacher implements UserDetails {
         this.fullName = dto.getFullName();
         this.email = dto.getEmail();
         this.phoneNum = dto.getPhoneNum();
+        this.role = Role.valueOf(dto.getRole());
         this.academicDegree = dto.getAcademicDegree();
         this.password = dto.getPassword();
         this.role = Role.valueOf(dto.getRole());
@@ -69,6 +71,36 @@ public class Teacher implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Set.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
