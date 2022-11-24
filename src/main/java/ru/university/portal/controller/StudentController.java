@@ -18,7 +18,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @PreAuthorize("hasRole ('STUDENT') ")
+    @PreAuthorize("hasRole('STUDENT')")
     @RabbitListener(queues = "studentQueue")
     public void notificationListener(String message) {
         log.info("Студент получил сообщение: " + message);
@@ -29,6 +29,7 @@ public class StudentController {
         return ResponseEntity.ok().body(studentService.findStudentById(studentId));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createStudent(@RequestBody StudentDTO dto) {
         try {
@@ -44,6 +45,7 @@ public class StudentController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{studentId}")
     public ResponseEntity<?> updateStudent(@PathVariable Long studentId,
                                            @RequestBody StudentDTO dto) {
@@ -60,6 +62,7 @@ public class StudentController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{studentId}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long studentId) {
         studentService.deleteStudentById(studentId);

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.LoginDTO;
@@ -24,14 +23,13 @@ import javax.servlet.http.HttpSession;
 public class TeacherController {
 
     private final TeacherService teacherService;
-    private final AuthenticationManager authenticationManager;
 
     @RabbitListener(queues = "teacherQueue")
     public void notificationListener(String message) {
         log.info("Преподаватель получил сообщение: " + message);
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<?> createTeacher(@RequestBody TeacherDTO dto) {
         try {
@@ -46,7 +44,6 @@ public class TeacherController {
         }
     }
 
-    //    для админа
     @PostMapping("/login")
     public ResponseEntity<?> loginTeacher(@RequestBody LoginDTO dto, HttpServletResponse response,
                                           HttpSession session) {
@@ -64,7 +61,7 @@ public class TeacherController {
     }
 
     @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping("/groups/{teacherId}")
+    @GetMapping("teacher/groups/{teacherId}")
     public ResponseEntity<?> findTeacherGroups(@PathVariable Long teacherId) {
         return ResponseEntity.ok().body(teacherService.findTeacherById(teacherId).getGroups());
     }
@@ -74,7 +71,7 @@ public class TeacherController {
         return ResponseEntity.ok().body(teacherService.findTeacherById(teacherId));
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{teacherId}")
     public ResponseEntity<?> updateTeacher(@PathVariable Long teacherId,
                                            @RequestBody TeacherDTO dto) {
@@ -92,7 +89,7 @@ public class TeacherController {
         }
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{teacherId}")
     public ResponseEntity<?> deleteTeacherById(@PathVariable Long teacherId) {
         teacherService.deleteTeacherById(teacherId);

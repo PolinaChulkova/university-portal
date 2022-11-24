@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.university.portal.dto.CreateTaskAnswerDTO;
@@ -20,18 +21,21 @@ public class TaskAnswerController {
     private final TaskAnswerService taskAnswerService;
     private final AmqpTemplate amqpTemplate;
 
+    @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/for-student/{studentId}/{taskId}")
     public ResponseEntity<?> getTaskAnswerForStudent(@PathVariable Long studentId,
                                                      @PathVariable Long taskId) {
         return ResponseEntity.ok().body(taskAnswerService.getTaskAnswerForStudent(taskId, studentId));
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/for-teacher/{teacherId}/{taskId}")
     public ResponseEntity<?> getTaskAnswersForTeacher(@PathVariable Long teacherId,
                                                       @PathVariable Long taskId) {
         return ResponseEntity.ok().body(taskAnswerService.getTaskAnswersForTeacher(taskId, teacherId));
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/send")
     private ResponseEntity<?> sendTaskAnswer(@RequestBody CreateTaskAnswerDTO dto) {
         try {
@@ -49,6 +53,7 @@ public class TaskAnswerController {
         }
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/upload/{taskAnswerId}")
     public ResponseEntity<?> uploadFilesToTaskAnswer(@PathVariable Long taskAnswerId,
                                                      @RequestParam MultipartFile[] files) {
@@ -64,6 +69,7 @@ public class TaskAnswerController {
         }
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @PutMapping("/update/{taskAnswerId}")
     public ResponseEntity<?> updateTaskAnswer(@PathVariable Long taskAnswerId,
                                               @RequestBody String comment) {
@@ -85,6 +91,7 @@ public class TaskAnswerController {
         return ResponseEntity.ok().body(taskAnswerService.findTaskAnswerById(taskAnswerId));
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @DeleteMapping("/delete-file/{taskAnswerId}")
     public ResponseEntity<?> deleteFileFromTaskAnswer(@PathVariable Long taskAnswerId,
                                                       @RequestParam("file-uri") String fileUri) {
@@ -101,6 +108,7 @@ public class TaskAnswerController {
         }
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @DeleteMapping("/delete/{taskAnswerId}/{studentId}")
     public ResponseEntity<?> deleteTaskAnswer(@PathVariable Long taskAnswerId,
                                               @PathVariable Long studentId) {

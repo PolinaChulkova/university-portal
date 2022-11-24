@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.dto.SubjectDto;
@@ -23,6 +24,7 @@ public class SubjectController {
         return ResponseEntity.ok().body(subjectService.findSubjectById(subjectId));
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/student/all/{groupId}/{page}")
     public ResponseEntity<?> getAllGroupSubjects(@PathVariable Long groupId,
                                                  @PathVariable int page) {
@@ -31,6 +33,7 @@ public class SubjectController {
                 .body(subjectService.findAllGroupSubjects(groupId, pageable).getContent());
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/teacher/search/{teacherId}/{page}")
     public ResponseEntity<?> searchTeacherSubject(@PathVariable Long teacherId,
                                                   @PathVariable int page,
@@ -40,6 +43,7 @@ public class SubjectController {
                 .body(subjectService.searchTeacherSubject(teacherId, key, pageable).getContent());
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/teacher/all/{teacherId}/{page}")
     public ResponseEntity<?> getAllTeacherSubjects(@PathVariable Long teacherId,
                                                    @PathVariable int page) {
@@ -48,7 +52,7 @@ public class SubjectController {
                 .body(subjectService.findAllTeacherSubjects(teacherId, pageable).getContent());
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{subjectId}")
     public ResponseEntity<?> deleteSubject(@PathVariable Long subjectId) {
         subjectService.deleteSubjectById(subjectId);
@@ -56,7 +60,7 @@ public class SubjectController {
                 + subjectId + " удалён"));
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createSubject(@RequestBody SubjectDto dto) {
         try {
@@ -73,7 +77,7 @@ public class SubjectController {
         }
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-teacher/{subjectId}/{teacherId}")
     public ResponseEntity<?> addTeacherToSubject(@PathVariable Long subjectId,
                                                  @PathVariable Long teacherId) {
@@ -92,7 +96,7 @@ public class SubjectController {
         }
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-group/{subjectId}/{groupId}")
     public ResponseEntity<?> addGroupToSubject(@PathVariable Long subjectId,
                                                @PathVariable Long groupId) {
@@ -110,7 +114,7 @@ public class SubjectController {
         }
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/detach-teacher/{subjectId}/{teacherId}")
     public ResponseEntity<?> detachTeacherFromSubject(@PathVariable Long subjectId,
                                                       @PathVariable Long teacherId) {
@@ -129,7 +133,7 @@ public class SubjectController {
         }
     }
 
-    //    для админа
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/detach-group/{subjectId}/{groupId}")
     public ResponseEntity<?> detachGroupFromSubject(@PathVariable Long subjectId,
                                                     @PathVariable Long groupId) {

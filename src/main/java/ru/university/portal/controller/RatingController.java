@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.university.portal.dto.CreateRatingDTO;
 import ru.university.portal.dto.MessageResponse;
@@ -20,7 +21,8 @@ public class RatingController {
     private final RatingService ratingService;
     private final AmqpTemplate amqpTemplate;
 
-    @PostMapping("/create")
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping("/teacher/create")
     public ResponseEntity<?> createRating(@RequestBody CreateRatingDTO dto) {
         try {
             Rating rating = ratingService.createRating(dto);
@@ -37,7 +39,8 @@ public class RatingController {
         }
     }
 
-    @PutMapping("/update/{ratingId}/{teacherId}")
+    @PreAuthorize("hasRole('TEACHER')")
+    @PutMapping("/teacher/update/{ratingId}/{teacherId}")
     public ResponseEntity<?> updateRating(@PathVariable Long ratingId,
                                           @PathVariable Long teacherId,
                                           @RequestBody UpdateRatingDTO dto) {
@@ -54,12 +57,14 @@ public class RatingController {
         }
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/student/{taskId}/{studentId}")
     public ResponseEntity<?> findRatingForStudent(@PathVariable Long taskId,
                                                   @PathVariable Long studentId) {
         return ResponseEntity.ok().body(ratingService.findRatingForStudent(taskId, studentId));
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/teacher/{taskId}/{teacherId}")
     public ResponseEntity<?> findAllForTeacher(@PathVariable Long taskId,
                                                @PathVariable Long teacherId) {

@@ -29,8 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling()
                 .and()
                 .csrf().disable()
+//                .logout().deleteCookies()
 //                .and()
-//                .logout().deleteCookies(CookieAuthFilter.COOKIE_NAME)
                 .authorizeRequests()
                 .antMatchers("/teacher/register", "/teacher/login",
                         "/logout").permitAll()
