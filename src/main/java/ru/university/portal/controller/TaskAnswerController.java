@@ -12,6 +12,8 @@ import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.model.TaskAnswer;
 import ru.university.portal.service.TaskAnswerService;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/task-answer")
 @AllArgsConstructor
@@ -37,12 +39,13 @@ public class TaskAnswerController {
 
     @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/send")
-    private ResponseEntity<?> sendTaskAnswer(@RequestBody CreateTaskAnswerDTO dto) {
+    private ResponseEntity<?> sendTaskAnswer(@RequestBody CreateTaskAnswerDTO dto, Principal principal) {
         try {
-            TaskAnswer answer = taskAnswerService.sendTaskAnswer(dto);
+            TaskAnswer answer = taskAnswerService.sendTaskAnswer(dto, principal.getName());
             amqpTemplate.convertAndSend("teacherQueue", answer.getStudent().getFullName()
                     + "  из группы \"" + answer.getStudent().getGroup()
                     + " прислал(-а) задание на проверку по предмету");
+
             return ResponseEntity.ok().body(answer);
 
         } catch (RuntimeException e) {

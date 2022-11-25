@@ -13,8 +13,8 @@ import java.util.Optional;
 public interface GroupRepo extends JpaRepository<Group, Long> {
 
     @Query(value = "SELECT g FROM Group g JOIN g.subjects s JOIN s.teachers t " +
-            "WHERE t.id = ?1 AND g.id = ?2")
-    Group findByTeacherIdAndGroupId(Long teacherId, Long id);
+            "WHERE t.email = ?1 AND g.id = ?2")
+    Group findByTeacherEmailAndGroupId(String teacherEmail, Long id);
 
     Optional<Group> findById(Long id);
 

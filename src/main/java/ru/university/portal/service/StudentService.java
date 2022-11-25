@@ -1,15 +1,11 @@
 package ru.university.portal.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.CachingUserDetailsService;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.university.portal.dto.LoginDTO;
 import ru.university.portal.dto.StudentDTO;
 import ru.university.portal.model.Student;
 import ru.university.portal.repo.StudentRepo;
@@ -36,7 +32,7 @@ public class StudentService implements UserDetailsService {
 //                .loadUserByUsername(dto.getEmail());
 //    }
 
-    public void updateStudent(Long studentId, StudentDTO dto) {
+    public Student updateStudent(Long studentId, StudentDTO dto) {
             Student student = findStudentById(studentId);
             student.setFullName(dto.getFullName());
             student.setEmail(dto.getEmail());
@@ -44,6 +40,7 @@ public class StudentService implements UserDetailsService {
             student.setPhoneNum(dto.getPhoneNum());
 
             studentRepo.save(student);
+            return student;
     }
 
     public Student findStudentByEmail(String studentEmail) {

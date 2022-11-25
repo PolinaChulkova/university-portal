@@ -36,7 +36,7 @@ public class Student implements UserDetails {
 
     @Enumerated
     @Column(name = "role")
-    private Role role;
+    private Role role = Role.STUDENT;
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
@@ -50,7 +50,6 @@ public class Student implements UserDetails {
     public Student(StudentDTO dto) {
         this.fullName = dto.getFullName();
         this.email = dto.getEmail();
-        this.role = Role.valueOf(dto.getRole());
         this.phoneNum = dto.getPhoneNum();
     }
 

@@ -3,15 +3,15 @@ package ru.university.portal.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.university.portal.model.Student;
 
-import java.util.Set;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @Getter@Setter
 public class CreateTaskAnswerDTO {
+    @Size(max = 200, message = "Длина комментария до 200 символов")
     private String comment;
-    //    после созании Security студент будет получаться из Principal
-    private Long studentId;
+    @NotNull(message = "Выберите задание")
     private Long taskId;
 }

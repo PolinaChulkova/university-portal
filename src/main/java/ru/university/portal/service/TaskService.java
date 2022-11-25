@@ -26,8 +26,8 @@ public class TaskService {
     private final FileService fileService;
     private final TeacherService teacherService;
 
-    public Task createTask(CreateTaskDTO dto) {
-            if (groupRepo.findByTeacherIdAndGroupId(dto.getTeacherId(), dto.getGroupId()) == null)
+    public Task createTask(CreateTaskDTO dto, String teacherEmail) {
+            if (groupRepo.findByTeacherEmailAndGroupId(teacherEmail, dto.getGroupId()) == null)
                 throw new RuntimeException("Невозможно создать задание для группы, " +
                         "т.к. она закреплена за другим преподавателем");
 
@@ -49,10 +49,10 @@ public class TaskService {
         taskRepo.save(task);
     }
 
-    public void updateTask(Long taskId, UpdateTaskDTO dto) {
+    public void updateTask(Long taskId, UpdateTaskDTO dto, String teacherEmail) {
             Task task = findTaskById(taskId);
 
-            if (!task.getTeacher().equals(teacherService.findTeacherById(dto.getTeacherId())))
+            if (!task.getTeacher().equals(teacherService.findTeacherByEmail(teacherEmail)))
                 throw new RuntimeException("Невозможно обновить задание" + dto.getName()
                         + ", т.к. оно создано другим преподавателем");
 
@@ -67,8 +67,8 @@ public class TaskService {
         return taskRepo.findBySubjectIdAndStudentId(subjectId, studentId);
     }
 
-    public Task findTaskByIdForStudent(Long taskId, Long studentId) {
-        return taskRepo.findByIdAndStudentId(taskId, studentId).orElseThrow(()
+    public Task findTaskByIdForStudent(Long taskId, String studentEmail) {
+        return taskRepo.findByIdAndStudentEmail(taskId, studentEmail).orElseThrow(()
                 -> new RuntimeException("Задание с id=" + taskId + " недоступно."));
     }
 

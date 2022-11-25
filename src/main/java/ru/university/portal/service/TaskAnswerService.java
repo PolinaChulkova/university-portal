@@ -32,15 +32,15 @@ public class TaskAnswerService {
         return taskAnswerRepo.findByTaskIdAndTeacherId(taskId, teacherId);
     }
 
-    public TaskAnswer sendTaskAnswer(CreateTaskAnswerDTO dto) {
-        if (taskService.findTaskByIdForStudent(dto.getTaskId(), dto.getStudentId()) == null) {
+    public TaskAnswer sendTaskAnswer(CreateTaskAnswerDTO dto, String email) {
+        if (taskService.findTaskByIdForStudent(dto.getTaskId(), email) == null) {
             throw new RuntimeException("Нельзя отправить ответ на это задание");
         }
 
         Task task = taskService.findTaskById(dto.getTaskId());
         TaskAnswer answer = new TaskAnswer(
                 dto.getComment(),
-                studentService.findStudentById(dto.getStudentId()),
+                studentService.findStudentByEmail(email),
                 task
         );
         task.getTaskAnswers().add(answer);

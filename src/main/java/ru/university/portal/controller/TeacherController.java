@@ -5,16 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.university.portal.dto.LoginDTO;
 import ru.university.portal.dto.MessageResponse;
 import ru.university.portal.dto.TeacherDTO;
 import ru.university.portal.service.TeacherService;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/teacher")
@@ -44,21 +38,21 @@ public class TeacherController {
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginTeacher(@RequestBody LoginDTO dto, HttpServletResponse response,
-                                          HttpSession session) {
-        try {
-            Cookie cookie = new Cookie("SESSION", session.getId());
-            response.addCookie(cookie);
-            return ResponseEntity.ok().body(teacherService.findTeacherByEmail(dto.getEmail()));
-        } catch (RuntimeException e) {
-            log.error("Преподаватель с email: " + dto.getEmail() + " не создан. Error: "
-                    + e.getLocalizedMessage());
-            SecurityContextHolder.clearContext();
-            return ResponseEntity.badRequest().body(new MessageResponse("Преподаватель с email: " + dto.getEmail())
-                    + " не создан. Error: " + e.getLocalizedMessage());
-        }
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<?> loginTeacher(@RequestBody LoginDTO dto, HttpServletResponse response,
+//                                          HttpSession session) {
+//        try {
+//            Cookie cookie = new Cookie("SESSION", session.getId());
+//            response.addCookie(cookie);
+//            return ResponseEntity.ok().body(teacherService.findTeacherByEmail(dto.getEmail()));
+//        } catch (RuntimeException e) {
+//            log.error("Преподаватель с email: " + dto.getEmail() + " не создан. Error: "
+//                    + e.getLocalizedMessage());
+//            SecurityContextHolder.clearContext();
+//            return ResponseEntity.badRequest().body(new MessageResponse("Преподаватель с email: " + dto.getEmail())
+//                    + " не создан. Error: " + e.getLocalizedMessage());
+//        }
+//    }
 
     @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("teacher/groups/{teacherId}")
@@ -76,9 +70,7 @@ public class TeacherController {
     public ResponseEntity<?> updateTeacher(@PathVariable Long teacherId,
                                            @RequestBody TeacherDTO dto) {
         try {
-            teacherService.updateTeacher(teacherId, dto);
-            return ResponseEntity.ok().body(new MessageResponse("Обновлён преподаватель с email: "
-                    + dto.getEmail()));
+            return ResponseEntity.ok().body(teacherService.updateTeacher(teacherId, dto));
 
         } catch (RuntimeException e) {
             log.error("Преподватель с Id= " + teacherId + " не обновлён. {}"

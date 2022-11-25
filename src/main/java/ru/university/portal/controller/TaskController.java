@@ -15,6 +15,8 @@ import ru.university.portal.dto.UpdateTaskDTO;
 import ru.university.portal.model.Task;
 import ru.university.portal.service.TaskService;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/task")
 @AllArgsConstructor
@@ -25,10 +27,9 @@ public class TaskController {
     private final AmqpTemplate template;
 
     @PreAuthorize("hasRole('STUDENT')")
-    @GetMapping("/student/{studentId}/{taskId}")
-    public ResponseEntity<?> getStudentTask(@PathVariable Long studentId,
-                                            @PathVariable Long taskId) {
-        return ResponseEntity.ok().body(taskService.findTaskByIdForStudent(taskId, studentId));
+    @GetMapping("/student/{taskId}")
+    public ResponseEntity<?> getStudentTask(@PathVariable Long taskId, Principal principal) {
+        return ResponseEntity.ok().body(taskService.findTaskByIdForStudent(taskId, principal.getName()));
     }
 
     @PreAuthorize("hasRole('STUDENT')")
@@ -55,9 +56,9 @@ public class TaskController {
 
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/create")
-    public ResponseEntity<?> createTask(@RequestBody CreateTaskDTO dto) {
+    public ResponseEntity<?> createTask(@RequestBody CreateTaskDTO dto, Principal principal) {
         try {
-            Task task = taskService.createTask(dto);
+            Task task = taskService.createTask(dto, principal.getName());
             template.convertAndSend("studentQueue", "Создано новое задание по предмету \""
                     + task.getName() + "\"");
             return ResponseEntity.ok().body(task);
@@ -108,9 +109,10 @@ public class TaskController {
     @PreAuthorize("hasRole('TEACHER')")
     @PutMapping("/update/{taskId}")
     public ResponseEntity<?> updateTeacherTask(@PathVariable Long taskId,
-                                               @RequestBody UpdateTaskDTO dto) {
+                                               @RequestBody UpdateTaskDTO dto,
+                                               Principal principal) {
         try {
-            taskService.updateTask(taskId, dto);
+            taskService.updateTask(taskId, dto, principal.getName());
             return ResponseEntity.ok().body(new MessageResponse("Задание " + dto.getName() + " обновлено."));
 
         } catch (RuntimeException e) {

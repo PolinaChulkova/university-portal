@@ -36,8 +36,7 @@ public class TeacherService implements UserDetailsService {
     }
 
 
-    public void updateTeacher(Long teacherId, TeacherDTO dto) {
-        try {
+    public Teacher updateTeacher(Long teacherId, TeacherDTO dto) {
             Teacher teacher = findTeacherById(teacherId);
             teacher.setFullName(dto.getFullName());
             teacher.setEmail(dto.getEmail());
@@ -46,11 +45,7 @@ public class TeacherService implements UserDetailsService {
             teacher.setAcademicDegree(dto.getAcademicDegree());
 
             teacherRepo.save(teacher);
-
-        } catch (RuntimeException e) {
-            log.error("Преподватель с Id= " + teacherId + " не обновлён. {}"
-                    + e.getLocalizedMessage());
-        }
+            return teacher;
     }
 
     public void deleteTeacherById(Long teacherId) {
